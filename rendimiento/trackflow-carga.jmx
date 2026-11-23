@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Prueba de carga de TrackFlow (Sprint 3). Dos perfiles a la vez:
+     - Clientes: 50 usuarios consultan rastreo, historial, ciudades, horario de recogidas y el chatbot.
+     - Operadores: 10 usuarios inician sesión, registran envíos y reimprimen el comprobante.
+     Ejecutar: jmeter -n -t trackflow-carga.jmx -l resultados.jtl -e -o reporte-html
+     Propiedades opcionales: -Jenvios=localhost -JpuertoEnvios=18080 -JpuertoReportes=18082 -JpuertoLogistica=18083
+                             -JclaveOperador=... -Jclientes=50 -Joperadores=10 -Jiteraciones=20 -->
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="TrackFlow · Sprint 3 · Carga">
+      <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
+      <elementProp name="TestPlan.user_defined_variables" elementType="Arguments">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="host" elementType="Argument"><stringProp name="Argument.name">host</stringProp><stringProp name="Argument.value">${__P(host,localhost)}</stringProp></elementProp>
+          <elementProp name="pEnvios" elementType="Argument"><stringProp name="Argument.name">pEnvios</stringProp><stringProp name="Argument.value">${__P(puertoEnvios,18080)}</stringProp></elementProp>
+          <elementProp name="pReportes" elementType="Argument"><stringProp name="Argument.name">pReportes</stringProp><stringProp name="Argument.value">${__P(puertoReportes,18082)}</stringProp></elementProp>
+          <elementProp name="pLogistica" elementType="Argument"><stringProp name="Argument.name">pLogistica</stringProp><stringProp name="Argument.value">${__P(puertoLogistica,18083)}</stringProp></elementProp>
+          <elementProp name="claveOperador" elementType="Argument"><stringProp name="Argument.name">claveOperador</stringProp><stringProp name="Argument.value">${__P(claveOperador,Operador-Local-2026)}</stringProp></elementProp>
+        </collectionProp>
+      </elementProp>
+    </TestPlan>
+    <hashTree>
+      <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="Valores por defecto HTTP">
+        <elementProp name="HTTPsampler.Arguments" elementType="Arguments"><collectionProp name="Arguments.arguments"/></elementProp>
+        <stringProp name="HTTPSampler.domain">${host}</stringProp>
+        <stringProp name="HTTPSampler.protocol">http</stringProp>
+        <stringProp name="HTTPSampler.connect_timeout">5000</stringProp>
+        <stringProp name="HTTPSampler.response_timeout">15000</stringProp>
+      </ConfigTestElement>
+      <hashTree/>
+      <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Cabeceras JSON">
+        <collectionProp name="HeaderManager.headers">
+          <elementProp name="" elementType="Header"><stringProp name="Header.name">Content-Type</stringProp><stringProp name="Header.value">application/json</stringProp></elementProp>
+        </collectionProp>
+      </HeaderManager>
+      <hashTree/>
+
+      <!-- Preparación: un operador registra el envío que van a rastrear los clientes -->
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="Preparación">
+        <stringProp name="ThreadGroup.on_sample_error">stoptest</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController"><boolProp name="LoopController.continue_forever">false</boolProp><stringProp name="LoopController.loops">1</stringProp></elementProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
+      </SetupThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Preparación · ingreso operador">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/auth/login</stringProp><stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments"><collectionProp name="Arguments.arguments"><elementProp name="" elementType="HTTPArgument"><boolProp name="HTTPArgument.always_encode">false</boolProp><stringProp name="Argument.value">{"username":"operador","password":"${claveOperador}"}</stringProp><stringProp name="Argument.metadata">=</stringProp></elementProp></collectionProp></elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="token"><stringProp name="JSONPostProcessor.referenceNames">token</stringProp><stringProp name="JSONPostProcessor.jsonPathExprs">$.token</stringProp><stringProp name="JSONPostProcessor.match_numbers">1</stringProp></JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Preparación · registrar envío">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/shipments</stringProp><stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments"><collectionProp name="Arguments.arguments"><elementProp name="" elementType="HTTPArgument"><boolProp name="HTTPArgument.always_encode">false</boolProp><stringProp name="Argument.value">{"sender":{"fullName":"Ana Torres","documentType":"CC","documentNumber":"1000000001","phone":"3001234545","address":"Calle 1 # 1-1","cityId":1},"recipient":{"fullName":"Luis Gómez","documentType":"CC","documentNumber":"2000000002","phone":"3009876543","address":"Carrera 2 # 2-2","cityId":10},"description":"Carga JMeter"}</stringProp><stringProp name="Argument.metadata">=</stringProp></elementProp></collectionProp></elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Token"><collectionProp name="HeaderManager.headers"><elementProp name="" elementType="Header"><stringProp name="Header.name">Authorization</stringProp><stringProp name="Header.value">Bearer ${token}</stringProp></elementProp></collectionProp></HeaderManager>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="guía"><stringProp name="JSONPostProcessor.referenceNames">guia</stringProp><stringProp name="JSONPostProcessor.jsonPathExprs">$.trackingNumber</stringProp><stringProp name="JSONPostProcessor.match_numbers">1</stringProp></JSONPostProcessor>
+          <hashTree/>
+          <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Compartir guía y token"><stringProp name="scriptLanguage">groovy</stringProp><stringProp name="script">props.put('guia', vars.get('guia')); props.put('tokenOp', vars.get('token')); Thread.sleep(3000)</stringProp></JSR223PostProcessor>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+
+      <!-- Clientes: consultas públicas y de seguimiento -->
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Clientes">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController"><boolProp name="LoopController.continue_forever">false</boolProp><stringProp name="LoopController.loops">${__P(iteraciones,20)}</stringProp></elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(clientes,50)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">30</stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Token del canal de atención"><collectionProp name="HeaderManager.headers"><elementProp name="" elementType="Header"><stringProp name="Header.name">Authorization</stringProp><stringProp name="Header.value">Bearer ${__P(tokenOp)}</stringProp></elementProp></collectionProp></HeaderManager>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clientes · buscar ciudad">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/cities?q=MED&amp;onlyCovered=true</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clientes · rastrear envío">
+          <stringProp name="HTTPSampler.port">${pReportes}</stringProp><stringProp name="HTTPSampler.path">/api/tracking/${__P(guia)}</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Trae la guía"><collectionProp name="Asserion.test_strings"><stringProp name="1">${__P(guia)}</stringProp></collectionProp><stringProp name="Assertion.test_field">Assertion.response_data</stringProp><intProp name="Assertion.test_type">2</intProp></ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clientes · historial del envío">
+          <stringProp name="HTTPSampler.port">${pLogistica}</stringProp><stringProp name="HTTPSampler.path">/api/shipments/${__P(guia)}/events</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clientes · horario de recogidas">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/pickups/operating-hours</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Clientes · sugerencias del chatbot">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/chatbot/sugerencias</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree/>
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Pausa entre clics"><stringProp name="ConstantTimer.delay">200</stringProp><stringProp name="RandomTimer.range">300</stringProp></UniformRandomTimer>
+        <hashTree/>
+      </hashTree>
+
+      <!-- Operadores: ingreso, registro de envíos y comprobante -->
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Operadores">
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController"><boolProp name="LoopController.continue_forever">false</boolProp><stringProp name="LoopController.loops">${__P(iteraciones,20)}</stringProp></elementProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(operadores,10)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">20</stringProp>
+      </ThreadGroup>
+      <hashTree>
+        <OnceOnlyController guiclass="OnceOnlyControllerGui" testclass="OnceOnlyController" testname="Una vez por operador"/>
+        <hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Operadores · iniciar sesión">
+            <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/auth/login</stringProp><stringProp name="HTTPSampler.method">POST</stringProp>
+            <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments"><collectionProp name="Arguments.arguments"><elementProp name="" elementType="HTTPArgument"><boolProp name="HTTPArgument.always_encode">false</boolProp><stringProp name="Argument.value">{"username":"operador","password":"${claveOperador}"}</stringProp><stringProp name="Argument.metadata">=</stringProp></elementProp></collectionProp></elementProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="token"><stringProp name="JSONPostProcessor.referenceNames">tk</stringProp><stringProp name="JSONPostProcessor.jsonPathExprs">$.token</stringProp><stringProp name="JSONPostProcessor.match_numbers">1</stringProp></JSONPostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Operadores · registrar envío">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/shipments</stringProp><stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments"><collectionProp name="Arguments.arguments"><elementProp name="" elementType="HTTPArgument"><boolProp name="HTTPArgument.always_encode">false</boolProp><stringProp name="Argument.value">{"sender":{"fullName":"Ana Torres","documentType":"CC","documentNumber":"1000000001","phone":"3001234545","address":"Calle 1 # 1-1","cityId":1},"recipient":{"fullName":"Luis Gómez","documentType":"CC","documentNumber":"2000000002","phone":"3009876543","address":"Carrera 2 # 2-2","cityId":10},"description":"Carga JMeter ${__threadNum}-${__counter(FALSE,)}"}</stringProp><stringProp name="Argument.metadata">=</stringProp></elementProp></collectionProp></elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Token"><collectionProp name="HeaderManager.headers"><elementProp name="" elementType="Header"><stringProp name="Header.name">Authorization</stringProp><stringProp name="Header.value">Bearer ${tk}</stringProp></elementProp></collectionProp></HeaderManager>
+          <hashTree/>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Responde 202"><collectionProp name="Asserion.test_strings"><stringProp name="1">202</stringProp></collectionProp><stringProp name="Assertion.test_field">Assertion.response_code</stringProp><intProp name="Assertion.test_type">8</intProp></ResponseAssertion>
+          <hashTree/>
+          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="guía nueva"><stringProp name="JSONPostProcessor.referenceNames">nueva</stringProp><stringProp name="JSONPostProcessor.jsonPathExprs">$.trackingNumber</stringProp><stringProp name="JSONPostProcessor.match_numbers">1</stringProp></JSONPostProcessor>
+          <hashTree/>
+        </hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Operadores · reimprimir comprobante">
+          <stringProp name="HTTPSampler.port">${pEnvios}</stringProp><stringProp name="HTTPSampler.path">/api/shipments/${__P(guia)}/receipt</stringProp><stringProp name="HTTPSampler.method">GET</stringProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Token"><collectionProp name="HeaderManager.headers"><elementProp name="" elementType="Header"><stringProp name="Header.name">Authorization</stringProp><stringProp name="Header.value">Bearer ${tk}</stringProp></elementProp></collectionProp></HeaderManager>
+          <hashTree/>
+        </hashTree>
+        <UniformRandomTimer guiclass="UniformRandomTimerGui" testclass="UniformRandomTimer" testname="Tiempo de digitación"><stringProp name="ConstantTimer.delay">500</stringProp><stringProp name="RandomTimer.range">500</stringProp></UniformRandomTimer>
+        <hashTree/>
+      </hashTree>
+
+      <DurationAssertion guiclass="DurationAssertionGui" testclass="DurationAssertion" testname="Responde en menos de 2 s"><stringProp name="DurationAssertion.duration">2000</stringProp></DurationAssertion>
+      <hashTree/>
+      <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Código 2xx"><collectionProp name="Asserion.test_strings"><stringProp name="1">2\d\d</stringProp></collectionProp><stringProp name="Assertion.test_field">Assertion.response_code</stringProp><intProp name="Assertion.test_type">1</intProp></ResponseAssertion>
+      <hashTree/>
+    </hashTree>
+  </hashTree>
+</jmeterTestPlan>

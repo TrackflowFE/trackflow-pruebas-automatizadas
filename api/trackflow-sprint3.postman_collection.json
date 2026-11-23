@@ -1,0 +1,2322 @@
+{
+  "info": {
+    "name": "TrackFlow · Sprint 3 · Pruebas de API",
+    "description": "Pruebas automatizadas de las historias del Sprint 3 (HU-09, 10, 11, 13, 14, 16, 19, 20 y 21) sobre las tres APIs. Calidad de Software, EAV01.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "00 · Preparación: ingreso de los tres roles",
+      "item": [
+        {
+          "name": "AT-00 · Ingreso admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"{{clave_admin}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-00 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-00 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_admin', pm.response.json().token);",
+                  "pm.test('AT-00 el token es de tipo Bearer', () => pm.expect(pm.response.json().type).to.eql('Bearer'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.environment.set('usuarioQa', 'qa' + Date.now().toString(36));",
+                  "pm.environment.set('correoPqr', 'qa' + Date.now() + '@trackflow.test');",
+                  "// Fechas en hora de Colombia (UTC-5), como las cuenta la API",
+                  "const hoy = new Date(Date.now() - 5*3600000);",
+                  "const d = new Date(hoy.getTime() + 2*86400000); if (d.getUTCDay() === 0) d.setUTCDate(d.getUTCDate() + 1);",
+                  "pm.environment.set('fechaRecogida', d.toISOString().slice(0, 10));",
+                  "const s = new Date(hoy.getTime()); s.setUTCDate(s.getUTCDate() + ((7 - s.getUTCDay()) % 7 || 7));",
+                  "pm.environment.set('proximoDomingo', s.toISOString().slice(0, 10));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-00 · Ingreso operador",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"operador\",\n  \"password\": \"{{clave_operador}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-00 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-00 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_operador', pm.response.json().token);",
+                  "pm.test('AT-00 el token es de tipo Bearer', () => pm.expect(pm.response.json().type).to.eql('Bearer'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-00 · Ingreso supervisor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"supervisor\",\n  \"password\": \"{{clave_supervisor}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-00 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-00 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_supervisor', pm.response.json().token);",
+                  "pm.test('AT-00 el token es de tipo Bearer', () => pm.expect(pm.response.json().type).to.eql('Bearer'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-11 · Gestión de usuarios, roles y permisos",
+      "item": [
+        {
+          "name": "AT-01 · El administrador crea un usuario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"clave\": \"Temporal-12345\",\n  \"roles\": \"OPERADOR\",\n  \"email\": \"{{usuarioQa}}@trackflow.test\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-01 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-01 responde 201', () => pm.response.to.have.status(201));",
+                  "const u = pm.response.json();",
+                  "pm.test('AT-01 nace activo, sin bloqueo y con su rol', () => { pm.expect(u.activo).to.be.true; pm.expect(u.bloqueado).to.be.false; pm.expect(u.roles).to.eql('OPERADOR'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-02 · Un operador no puede crear usuarios",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"intruso1\",\n  \"clave\": \"Temporal-12345\",\n  \"roles\": \"ADMIN\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-02 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-02 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-03 · Rol desconocido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"rolraro\",\n  \"clave\": \"Temporal-12345\",\n  \"roles\": \"JEFE\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-03 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-03 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-03 dice qué roles existen', () => pm.expect(pm.response.json().detail).to.include('OPERADOR, SUPERVISOR o ADMIN'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-04 · Usuario duplicado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"clave\": \"Temporal-12345\",\n  \"roles\": \"OPERADOR\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-04 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-04 responde 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-05 · El último administrador no puede perder su rol",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios/admin/roles",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"roles\": \"OPERADOR\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-05 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-05 responde 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-10 · Contraseña temporal, cambio y recuperación",
+      "item": [
+        {
+          "name": "AT-06 · Ingreso con la clave temporal: token sin roles",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"password\": \"Temporal-12345\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-06 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-06 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_qa', pm.response.json().token);",
+                  "const p = JSON.parse(atob(pm.response.json().token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));",
+                  "pm.test('AT-06 el token no trae roles y exige cambio', () => { pm.expect(p.roles).to.eql(''); pm.expect(p.mustChangePassword).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-07 · Con la clave temporal no se registran envíos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_qa}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender\": {\n    \"fullName\": \"Ana Torres\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"1000000001\",\n    \"phone\": \"3001234545\",\n    \"address\": \"Calle 1 # 1-1\",\n    \"cityId\": 1\n  },\n  \"recipient\": {\n    \"fullName\": \"Luis Gómez\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"2000000002\",\n    \"phone\": \"3009876543\",\n    \"address\": \"Carrera 2 # 2-2\",\n    \"cityId\": 10\n  },\n  \"description\": \"Documentos de prueba automatizada\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-07 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-07 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-08 · Clave nueva de menos de 10 caracteres",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_qa}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/clave/cambiar",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actual\": \"Temporal-12345\",\n  \"nueva\": \"corta\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-08 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-08 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-08 dice qué regla incumple', () => pm.expect(pm.response.json().detail).to.include('10 caracteres'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-09 · Clave nueva igual a la anterior",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_qa}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/clave/cambiar",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actual\": \"Temporal-12345\",\n  \"nueva\": \"Temporal-12345\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-09 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-09 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-09 exige que sea distinta', () => pm.expect(pm.response.json().detail).to.include('distinta'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-10 · Cambio de clave válido",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_qa}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/clave/cambiar",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"actual\": \"Temporal-12345\",\n  \"nueva\": \"Nueva-Clave-2026\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-10 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-10 responde 204', () => pm.response.to.have.status(204));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-11 · Ingreso con la clave nueva recupera el rol",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"password\": \"Nueva-Clave-2026\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-11 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-11 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_qa', pm.response.json().token);",
+                  "const p = JSON.parse(atob(pm.response.json().token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));",
+                  "pm.test('AT-11 el token ya trae OPERADOR', () => pm.expect(p.roles).to.eql('OPERADOR'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-12 · Recuperar con un correo que no existe da la misma respuesta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/clave/recuperar",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"nadie-{{usuarioQa}}@trackflow.test\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-12 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-12 responde 202', () => pm.response.to.have.status(202));",
+                  "pm.test('AT-12 respuesta uniforme (no revela si la cuenta existe)', () => pm.expect(pm.response.json().mensaje).to.include('Si el correo corresponde a una cuenta'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-09 · Bloqueo por intentos fallidos",
+      "item": [
+        {
+          "name": "AT-13 · Cinco intentos fallidos bloquean la cuenta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"password\": \"clave-equivocada\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-13 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-13 responde 401', () => pm.response.to.have.status(401));",
+                  "const n = Number(pm.environment.get('intentos')) + 1; pm.environment.set('intentos', n);",
+                  "if (n < 5) { pm.execution.setNextRequest(pm.info.requestName); } else { pm.environment.unset('intentos'); }"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (!pm.environment.get('intentos')) pm.environment.set('intentos', 0);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-14 · Bloqueada, ni la clave correcta entra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"password\": \"Nueva-Clave-2026\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-14 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-14 responde 401', () => pm.response.to.have.status(401));",
+                  "pm.test('AT-14 el mensaje no revela el bloqueo', () => pm.expect(pm.response.json().detail).to.eql('Usuario o clave incorrectos'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-15 · La auditoría registra el bloqueo",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios/auditoria?cuantos=20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-15 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-15 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-15 hay un CUENTA_BLOQUEADA del usuario', () => pm.expect(pm.response.json().some(a => a.accion === 'CUENTA_BLOQUEADA' && a.objetivo === pm.environment.get('usuarioQa'))).to.be.true);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-16 · El administrador desbloquea",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios/{{usuarioQa}}/desbloquear"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-16 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-16 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-16 queda sin bloqueo y contador en 0', () => { const u = pm.response.json(); pm.expect(u.bloqueado).to.be.false; pm.expect(u.intentosFallidos).to.eql(0); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-17 · Tras el desbloqueo entra de inmediato",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/login",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{usuarioQa}}\",\n  \"password\": \"Nueva-Clave-2026\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-17 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-17 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.environment.set('tk_qa', pm.response.json().token);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-18 · Desactivar al usuario cierra su sesión",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/admin/usuarios/{{usuarioQa}}/activo?valor=false"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-18 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-18 responde 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-19 · El token del usuario desactivado ya no sirve",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_qa}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/auth/sesion"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-19 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-19 responde 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-14 / HU-13 · Comprobante y datos personales",
+      "item": [
+        {
+          "name": "AT-20 · Registrar un envío devuelve el comprobante",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender\": {\n    \"fullName\": \"Ana Torres\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"1000000001\",\n    \"phone\": \"3001234545\",\n    \"address\": \"Calle 1 # 1-1\",\n    \"cityId\": 1\n  },\n  \"recipient\": {\n    \"fullName\": \"Luis Gómez\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"2000000002\",\n    \"phone\": \"3009876543\",\n    \"address\": \"Carrera 2 # 2-2\",\n    \"cityId\": 10\n  },\n  \"description\": \"Documentos de prueba automatizada\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-20 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-20 responde 202', () => pm.response.to.have.status(202));",
+                  "const j = pm.response.json(); pm.environment.set('guia', j.trackingNumber);",
+                  "pm.test('AT-20 guía con formato TF + 12', () => pm.expect(j.trackingNumber).to.match(/^TF[0-9A-Z]{12}$/));",
+                  "pm.test('AT-20 comprobante con seis campos', () => pm.expect(Object.keys(j.receipt)).to.have.members(['trackingNumber','registeredAt','senderName','originCity','recipientName','destinationCity']));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-21 · Reimprimir el comprobante",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments/{{guia}}/receipt"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-21 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-21 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-21 sin teléfonos ni direcciones', () => pm.expect(pm.response.text()).to.not.match(/3001234545|Calle 1/));",
+                  "pm.test('AT-21 no se guarda en caché', () => pm.expect(pm.response.headers.get('Cache-Control')).to.include('no-store'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2500);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-22 · Comprobante sin sesión",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseEnvios}}/api/shipments/{{guia}}/receipt"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-22 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-22 responde 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-23 · Comprobante de una guía inexistente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments/TF000000000000/receipt"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-23 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-23 responde 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-24 · El operador ve la ficha enmascarada",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments/{{guia}}/ficha"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-24 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-24 responde 200', () => pm.response.to.have.status(200));",
+                  "const s = pm.response.json().sender;",
+                  "pm.test('AT-24 teléfono y documento enmascarados', () => { pm.expect(s.phone).to.eql('300 *** **45'); pm.expect(s.documentNumber).to.not.eql('1000000001'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-25 · El operador no ve la ficha completa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments/{{guia}}/ficha/completa"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-25 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-25 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-26 · El administrador ve la ficha completa",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_admin}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments/{{guia}}/ficha/completa"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-26 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-26 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-26 datos sin enmascarar', () => pm.expect(pm.response.json().sender.phone).to.eql('3001234545'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-27 · Rastreo anónimo con datos mínimos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseReportes}}/api/tracking/{{guia}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-27 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-27 responde 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('AT-27 nombres enmascarados, sin dirección y marcado restricted', () => { pm.expect(j.senderName).to.eql('A*** T***'); pm.expect(j.recipientAddress == null).to.be.true; pm.expect(j.restricted).to.be.true; });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-11 · Reportes solo para supervisión",
+      "item": [
+        {
+          "name": "AT-28 · El operador ya no ve los reportes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseReportes}}/api/reports/transit-times?from=2026-11-01&to=2026-11-20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-28 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-28 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-29 · El supervisor ve los tiempos de tránsito",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseReportes}}/api/reports/transit-times?from=2026-11-01&to=2026-11-20"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-29 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-29 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-29 trae el periodo pedido', () => { pm.expect(pm.response.json().from).to.eql('2026-11-01'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-30 · Periodo anterior al inicio de la operación",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseReportes}}/api/reports/shipment-volume?from=1939-01-01&to=1939-02-01"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-30 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-30 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-30 explica el límite', () => pm.expect(pm.response.json().detail).to.include('2026-01-01'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-31 · Reporte sin sesión",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseReportes}}/api/reports/delayed-shipments"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-31 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-31 responde 401', () => pm.response.to.have.status(401));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-16 · Excepciones logísticas",
+      "item": [
+        {
+          "name": "AT-32 · Excepción sobre un envío sin movimientos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXCEPTION\",\n  \"centerId\": 1,\n  \"exceptionReason\": \"RECIPIENT_ABSENT\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-32 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-32 responde 422', () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-33 · Recibir el envío en el centro de origen",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"RECEIVED_AT_CENTER\",\n  \"centerId\": 1\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-33 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-33 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-34 · Excepción sin motivo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXCEPTION\",\n  \"centerId\": 1\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-34 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-34 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-34 lista los motivos válidos', () => pm.expect(pm.response.text()).to.include('RECIPIENT_ABSENT'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2500);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-35 · Excepción con un motivo que no existe",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXCEPTION\",\n  \"centerId\": 1,\n  \"exceptionReason\": \"LLUVIA\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-35 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-35 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-35 el error no expone clases Java', () => pm.expect(pm.response.text()).to.not.match(/java\\.|com\\.trackflow|Cannot deserialize/));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-36 · Registrar la excepción con motivo y nota",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXCEPTION\",\n  \"centerId\": 1,\n  \"exceptionReason\": \"DAMAGED\",\n  \"notes\": \"Caja mojada\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-36 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-36 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-37 · El historial muestra la excepción y el estado no retrocede",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-37 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-37 responde 200', () => pm.response.to.have.status(200));",
+                  "const m = pm.response.json().movements;",
+                  "pm.test('AT-37 hay dos movimientos y el último es la excepción', () => { pm.expect(m.length).to.eql(2); pm.expect(m[1].type).to.eql('EXCEPTION'); });",
+                  "pm.test('AT-37 el estado sigue en centro de distribución', () => pm.expect(m[1].resultingStatus).to.eql('AT_DISTRIBUTION_CENTER'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2500);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-38 · El supervisor no registra movimientos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseLogistica}}/api/shipments/{{guia}}/events",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"EXCEPTION\",\n  \"centerId\": 1,\n  \"exceptionReason\": \"HELD\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-38 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-38 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-20 · Recogidas a domicilio",
+      "item": [
+        {
+          "name": "AT-39 · Horario de atención público",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseEnvios}}/api/pickups/operating-hours"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-39 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-39 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-39 cinco franjas de 08:00 a 18:00', () => pm.expect(pm.response.json().slots).to.have.lengthOf(5));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-40 · Autoservicio: solicitar una recogida",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 5.5\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-40 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-40 responde 202', () => pm.response.to.have.status(202));",
+                  "const j = pm.response.json(); pm.environment.set('recogidaAuto', j.pickupNumber); pm.environment.set('codigoGestion', j.managementCode);",
+                  "pm.test('AT-40 número RC y código de 8 caracteres', () => { pm.expect(j.pickupNumber).to.match(/^RC/); pm.expect(j.managementCode).to.have.lengthOf(8); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-41 · Consultar la recogida con el código de gestión",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Codigo-Gestion",
+                "value": "{{codigoGestion}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service/{{recogidaAuto}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-41 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-41 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-41 queda solicitada', () => pm.expect(pm.response.json().status).to.eql('REQUESTED'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2500);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-42 · Un código equivocado responde igual que una recogida inexistente",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-Codigo-Gestion",
+                "value": "AAAAAAAA"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service/{{recogidaAuto}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-42 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-42 responde 404', () => pm.response.to.have.status(404));",
+                  "pm.test('AT-42 mensaje que no revela cuál falló', () => pm.expect(pm.response.json().detail).to.eql('Recogida o código de gestión incorrectos'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-43 · No se recoge los domingos",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{proximoDomingo}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 5.5\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-43 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-43 responde 422', () => pm.response.to.have.status(422));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-44 · Peso por encima de 100 kg",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 100.5\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-44 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-44 responde 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-45 · El autoservicio no puede vincular una guía",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 5.5,\n  \"shipmentTrackingNumber\": \"{{guia}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-45 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-45 responde 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-46 · Cancelar por autoservicio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Codigo-Gestion",
+                "value": "{{codigoGestion}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/self-service/{{recogidaAuto}}/cancel",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Ya no lo necesito\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-46 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-46 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-47 · Registrar el envío que se va a recoger",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/shipments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sender\": {\n    \"fullName\": \"Ana Torres\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"1000000001\",\n    \"phone\": \"3001234545\",\n    \"address\": \"Calle 1 # 1-1\",\n    \"cityId\": 1\n  },\n  \"recipient\": {\n    \"fullName\": \"Luis Gómez\",\n    \"documentType\": \"CC\",\n    \"documentNumber\": \"2000000002\",\n    \"phone\": \"3009876543\",\n    \"address\": \"Carrera 2 # 2-2\",\n    \"cityId\": 10\n  },\n  \"description\": \"Documentos de prueba automatizada\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-47 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-47 responde 202', () => pm.response.to.have.status(202));",
+                  "pm.environment.set('guiaRecogida', pm.response.json().trackingNumber);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-48 · El operador pide la recogida con la guía",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 5.5,\n  \"shipmentTrackingNumber\": \"{{guiaRecogida}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-48 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-48 responde 202', () => pm.response.to.have.status(202));",
+                  "pm.environment.set('recogida', pm.response.json().pickupNumber);"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2500);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-49 · La misma guía no admite otra recogida activa",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"Calle 45 # 12-30, apto 201\",\n  \"cityId\": 1,\n  \"contactName\": \"Ana Torres\",\n  \"contactPhone\": \"3001234567\",\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"packageSize\": \"MEDIUM\",\n  \"weightKg\": 5.5,\n  \"shipmentTrackingNumber\": \"{{guiaRecogida}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-49 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-49 responde 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2000);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-50 · Asignar la recogida al operador",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/{{recogida}}/schedule",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scheduledDate\": \"{{fechaRecogida}}\",\n  \"timeSlot\": \"08:00-10:00\",\n  \"assignedUsername\": \"operador\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-50 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-50 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-51 · Despachar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/{{recogida}}/dispatch"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-51 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-51 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2000);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-52 · Completar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pickups/{{recogida}}/complete"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-52 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-52 responde 202', () => pm.response.to.have.status(202));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 2000);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-53 · El envío recogido queda en custodia",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseReportes}}/api/tracking/{{guiaRecogida}}"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-53 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-53 responde 200', () => pm.response.to.have.status(200));",
+                  "// El estado llega por eventos (recogidas -> logística -> reportes): se consulta hasta 15 veces",
+                  "const n = Number(pm.environment.get('sondeos') || 0) + 1;",
+                  "if (pm.response.json().status !== 'IN_CUSTODY' && n < 15) { pm.environment.set('sondeos', n); pm.execution.setNextRequest(pm.info.requestName); return; }",
+                  "pm.environment.unset('sondeos');",
+                  "pm.test('AT-53 estado IN_CUSTODY (tras ' + n + ' consultas)', () => pm.expect(pm.response.json().status).to.eql('IN_CUSTODY'));"
+                ]
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 1500);"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-19 · Peticiones, quejas y reclamos",
+      "item": [
+        {
+          "name": "AT-54 · Radicar una queja",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"QUEJA\",\n  \"descripcion\": \"El paquete llegó con la caja rota y mojada.\",\n  \"contactoNombre\": \"Ana Torres\",\n  \"contactoEmail\": \"{{correoPqr}}\",\n  \"contactoTelefono\": \"3001234567\",\n  \"aceptaTratamientoDatos\": true\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-54 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-54 responde 201', () => pm.response.to.have.status(201));",
+                  "const j = pm.response.json(); pm.environment.set('radicado', j.radicado);",
+                  "pm.test('AT-54 radicado PQR-AAAA-NNNNN en estado RECIBIDA', () => { pm.expect(j.radicado).to.match(/^PQR-\\d{4}-\\d{5}$/); pm.expect(j.estado).to.eql('RECIBIDA'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-55 · Descripción de 19 caracteres (límite inferior)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"QUEJA\",\n  \"descripcion\": \"xxxxxxxxxxxxxxxxxxx\",\n  \"contactoNombre\": \"Ana Torres\",\n  \"contactoEmail\": \"{{correoPqr}}\",\n  \"contactoTelefono\": \"3001234567\",\n  \"aceptaTratamientoDatos\": true\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-55 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-55 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-55 indica el rango 20 a 2000', () => pm.expect(pm.response.text()).to.include('entre 20 y 2000'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-56 · Consultar con radicado y correo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/consulta",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"radicado\": \"{{radicado}}\",\n  \"email\": \"{{correoPqr}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-56 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-56 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-56 sin respuesta mientras no se resuelva', () => pm.expect(pm.response.json().respuesta).to.be.null);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-57 · Consultar con un correo ajeno",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/consulta",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"radicado\": \"{{radicado}}\",\n  \"email\": \"otro@trackflow.test\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-57 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-57 responde 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-58 · El operador no gestiona PQR",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_operador}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-58 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-58 responde 403', () => pm.response.to.have.status(403));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-59 · No se salta de RECIBIDA a RESUELTA",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/{{radicado}}/estado",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"RESUELTA\",\n  \"respuesta\": \"Respuesta de prueba\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-59 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-59 responde 409', () => pm.response.to.have.status(409));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-60 · Pasar a EN_TRAMITE",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/{{radicado}}/estado",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"EN_TRAMITE\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-60 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-60 responde 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-61 · Resolver sin respuesta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/{{radicado}}/estado",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"RESUELTA\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-61 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-61 responde 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-62 · Resolver con respuesta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{tk_supervisor}}"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/{{radicado}}/estado",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": \"RESUELTA\",\n  \"respuesta\": \"Le reponemos el envío sin costo.\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-62 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-62 responde 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-63 · El solicitante ve la respuesta",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/pqr/consulta",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"radicado\": \"{{radicado}}\",\n  \"email\": \"{{correoPqr}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-63 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-63 responde 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('AT-63 estado RESUELTA con respuesta e historial de 3 pasos', () => { pm.expect(j.estado).to.eql('RESUELTA'); pm.expect(j.respuesta).to.include('reponemos'); pm.expect(j.historial).to.have.lengthOf(3); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "HU-21 · Chatbot de preguntas frecuentes",
+      "item": [
+        {
+          "name": "AT-64 · Abrir una conversación",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseEnvios}}/api/chatbot/sesiones"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-64 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-64 responde 201', () => pm.response.to.have.status(201));",
+                  "pm.environment.set('sesionChat', pm.response.json().sesionId);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-65 · Pregunta frecuente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"{{sesionChat}}\",\n  \"texto\": \"¿Cómo rastreo mi envío?\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-65 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-65 responde 200', () => pm.response.to.have.status(200));",
+                  "const j = pm.response.json();",
+                  "pm.test('AT-65 responde la intención como_rastrear', () => { pm.expect(j.resultado).to.eql('RESPUESTA'); pm.expect(j.intencion).to.eql('como_rastrear'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-66 · Pregunta fuera de tema ofrece radicar una PQR",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"{{sesionChat}}\",\n  \"texto\": \"¿Cuál es la capital de Francia?\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-66 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-66 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-66 FUERA_DE_TEMA con acción ABRIR_PQR', () => { const j = pm.response.json(); pm.expect(j.resultado).to.eql('FUERA_DE_TEMA'); pm.expect(j.acciones[0].tipo).to.eql('ABRIR_PQR'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-67 · Un número de guía no consulta datos del envío",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"{{sesionChat}}\",\n  \"texto\": \"{{guia}}\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-67 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-67 responde 200', () => pm.response.to.have.status(200));",
+                  "pm.test('AT-67 manda a la página de rastreo sin mostrar datos', () => { pm.expect(pm.response.json().resultado).to.eql('NUMERO_DE_SEGUIMIENTO'); pm.expect(pm.response.text()).to.not.include('Luis'); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-68 · Mensaje de 301 caracteres",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"{{sesionChat}}\",\n  \"texto\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-68 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-68 responde 400', () => pm.response.to.have.status(400));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-69 · Sesión inexistente",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"00000000-0000-0000-0000-000000000000\",\n  \"texto\": \"hola\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-69 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-69 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-69 pide crear otra sesión', () => pm.expect(pm.response.json().detail).to.include('Crea una nueva'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "AT-70 · Identificador de sesión mal formado",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseEnvios}}/api/chatbot/mensajes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sesionId\": \"abc\",\n  \"texto\": \"hola\"\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('AT-70 tiempo de respuesta < 1500 ms', () => pm.expect(pm.response.responseTime).to.be.below(1500));",
+                  "pm.test('AT-70 responde 400', () => pm.response.to.have.status(400));",
+                  "pm.test('AT-70 el error no expone clases Java', () => pm.expect(pm.response.text()).to.not.match(/java\\.|com\\.trackflow|Cannot deserialize/));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
