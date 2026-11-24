@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="TrackFlow · Sprint 3 · Pruebas de API" tests="79" time="9.013">
+  <testsuite name="00 · Preparación: ingreso de los tres roles / AT-00 · Ingreso admin" id="36c9ddb5-98ad-40b8-ba19-dfae58c6ea00" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.212">
+    <testcase name="AT-00 tiempo de respuesta &lt; 1500 ms" time="0.212" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoAdmin"/>
+    <testcase name="AT-00 responde 200" time="0.212" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoAdmin"/>
+    <testcase name="AT-00 el token es de tipo Bearer" time="0.212" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoAdmin"/>
+  </testsuite>
+  <testsuite name="00 · Preparación: ingreso de los tres roles / AT-00 · Ingreso operador" id="3dc4c900-3a9d-460e-9e19-d92bf38913c6" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.121">
+    <testcase name="AT-00 tiempo de respuesta &lt; 1500 ms" time="0.121" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoOperador"/>
+    <testcase name="AT-00 responde 200" time="0.121" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoOperador"/>
+    <testcase name="AT-00 el token es de tipo Bearer" time="0.121" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoOperador"/>
+  </testsuite>
+  <testsuite name="00 · Preparación: ingreso de los tres roles / AT-00 · Ingreso supervisor" id="50371be2-bfdf-40cd-8241-7c340656f10b" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.115">
+    <testcase name="AT-00 tiempo de respuesta &lt; 1500 ms" time="0.115" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoSupervisor"/>
+    <testcase name="AT-00 responde 200" time="0.115" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoSupervisor"/>
+    <testcase name="AT-00 el token es de tipo Bearer" time="0.115" classname="00PreparacionIngresoDeLosTresRolesAt00IngresoSupervisor"/>
+  </testsuite>
+  <testsuite name="HU-11 · Gestión de usuarios, roles y permisos / AT-01 · El administrador crea un usuario" id="e03e605a-6a52-49ba-b305-c57ab7c18735" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.364">
+    <testcase name="AT-01 tiempo de respuesta &lt; 1500 ms" time="0.364" classname="Hu11GestionDeUsuariosRolesYPermisosAt01ElAdministradorCreaUnUsuario"/>
+    <testcase name="AT-01 responde 201" time="0.364" classname="Hu11GestionDeUsuariosRolesYPermisosAt01ElAdministradorCreaUnUsuario"/>
+    <testcase name="AT-01 nace activo, sin bloqueo y con su rol" time="0.364" classname="Hu11GestionDeUsuariosRolesYPermisosAt01ElAdministradorCreaUnUsuario"/>
+  </testsuite>
+  <testsuite name="HU-11 · Gestión de usuarios, roles y permisos / AT-02 · Un operador no puede crear usuarios" id="2ef83ae7-39c1-4050-9a8b-13fcb3bc90bc" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.048">
+    <testcase name="AT-02 tiempo de respuesta &lt; 1500 ms" time="0.048" classname="Hu11GestionDeUsuariosRolesYPermisosAt02UnOperadorNoPuedeCrearUsuarios"/>
+    <testcase name="AT-02 responde 403" time="0.048" classname="Hu11GestionDeUsuariosRolesYPermisosAt02UnOperadorNoPuedeCrearUsuarios"/>
+  </testsuite>
+  <testsuite name="HU-11 · Gestión de usuarios, roles y permisos / AT-03 · Rol desconocido" id="f33941b1-e4a9-4e9b-aa46-f6722d03bf3d" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.053">
+    <testcase name="AT-03 tiempo de respuesta &lt; 1500 ms" time="0.053" classname="Hu11GestionDeUsuariosRolesYPermisosAt03RolDesconocido"/>
+    <testcase name="AT-03 responde 400" time="0.053" classname="Hu11GestionDeUsuariosRolesYPermisosAt03RolDesconocido"/>
+    <testcase name="AT-03 dice qué roles existen" time="0.053" classname="Hu11GestionDeUsuariosRolesYPermisosAt03RolDesconocido"/>
+  </testsuite>
+  <testsuite name="HU-11 · Gestión de usuarios, roles y permisos / AT-04 · Usuario duplicado" id="e2d9ca77-bb65-47e4-b701-1c3fcaf9c12d" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.082">
+    <testcase name="AT-04 tiempo de respuesta &lt; 1500 ms" time="0.082" classname="Hu11GestionDeUsuariosRolesYPermisosAt04UsuarioDuplicado"/>
+    <testcase name="AT-04 responde 409" time="0.082" classname="Hu11GestionDeUsuariosRolesYPermisosAt04UsuarioDuplicado"/>
+  </testsuite>
+  <testsuite name="HU-11 · Gestión de usuarios, roles y permisos / AT-05 · El último administrador no puede perder su rol" id="f2b7c629-762e-4b90-8283-2a785e4ccc8a" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.322">
+    <testcase name="AT-05 tiempo de respuesta &lt; 1500 ms" time="0.322" classname="Hu11GestionDeUsuariosRolesYPermisosAt05ElUltimoAdministradorNoPuedePerderSuRol"/>
+    <testcase name="AT-05 responde 409" time="0.322" classname="Hu11GestionDeUsuariosRolesYPermisosAt05ElUltimoAdministradorNoPuedePerderSuRol"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-06 · Ingreso con la clave temporal: token sin roles" id="6b14ef80-dea4-4173-8c03-d0feeaa2899f" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.198">
+    <testcase name="AT-06 tiempo de respuesta &lt; 1500 ms" time="0.198" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt06IngresoConLaClaveTemporalTokenSinRoles"/>
+    <testcase name="AT-06 responde 200" time="0.198" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt06IngresoConLaClaveTemporalTokenSinRoles"/>
+    <testcase name="AT-06 el token no trae roles y exige cambio" time="0.198" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt06IngresoConLaClaveTemporalTokenSinRoles"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-07 · Con la clave temporal no se registran envíos" id="b43f363a-4784-4d26-ade4-3bbd309cb769" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.026">
+    <testcase name="AT-07 tiempo de respuesta &lt; 1500 ms" time="0.026" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt07ConLaClaveTemporalNoSeRegistranEnvios"/>
+    <testcase name="AT-07 responde 403" time="0.026" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt07ConLaClaveTemporalNoSeRegistranEnvios"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-08 · Clave nueva de menos de 10 caracteres" id="36475a84-a335-4a64-a373-29cc1c7f7a06" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.158">
+    <testcase name="AT-08 tiempo de respuesta &lt; 1500 ms" time="0.158" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt08ClaveNuevaDeMenosDe10Caracteres"/>
+    <testcase name="AT-08 responde 400" time="0.158" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt08ClaveNuevaDeMenosDe10Caracteres"/>
+    <testcase name="AT-08 dice qué regla incumple" time="0.158" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt08ClaveNuevaDeMenosDe10Caracteres"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-09 · Clave nueva igual a la anterior" id="de5bd800-49b0-4108-b5d2-2dddf81993de" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.196">
+    <testcase name="AT-09 tiempo de respuesta &lt; 1500 ms" time="0.196" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt09ClaveNuevaIgualALaAnterior"/>
+    <testcase name="AT-09 responde 400" time="0.196" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt09ClaveNuevaIgualALaAnterior"/>
+    <testcase name="AT-09 exige que sea distinta" time="0.196" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt09ClaveNuevaIgualALaAnterior"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-10 · Cambio de clave válido" id="0c15b62f-edab-4d50-9c11-2d72cca2508b" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.371">
+    <testcase name="AT-10 tiempo de respuesta &lt; 1500 ms" time="0.371" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt10CambioDeClaveValido"/>
+    <testcase name="AT-10 responde 204" time="0.371" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt10CambioDeClaveValido"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-11 · Ingreso con la clave nueva recupera el rol" id="30f7ca51-064b-4cd0-9e5d-5337b7a1c82e" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.122">
+    <testcase name="AT-11 tiempo de respuesta &lt; 1500 ms" time="0.122" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt11IngresoConLaClaveNuevaRecuperaElRol"/>
+    <testcase name="AT-11 responde 200" time="0.122" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt11IngresoConLaClaveNuevaRecuperaElRol"/>
+    <testcase name="AT-11 el token ya trae OPERADOR" time="0.122" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt11IngresoConLaClaveNuevaRecuperaElRol"/>
+  </testsuite>
+  <testsuite name="HU-10 · Contraseña temporal, cambio y recuperación / AT-12 · Recuperar con un correo que no existe da la misma respuesta" id="615df247-12a0-4401-af72-3a26d39ab3da" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.043">
+    <testcase name="AT-12 tiempo de respuesta &lt; 1500 ms" time="0.043" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt12RecuperarConUnCorreoQueNoExisteDaLaMismaRespuesta"/>
+    <testcase name="AT-12 responde 202" time="0.043" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt12RecuperarConUnCorreoQueNoExisteDaLaMismaRespuesta"/>
+    <testcase name="AT-12 respuesta uniforme (no revela si la cuenta existe)" time="0.043" classname="Hu10ContrasenaTemporalCambioYRecuperacionAt12RecuperarConUnCorreoQueNoExisteDaLaMismaRespuesta"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-13 · Cinco intentos fallidos bloquean la cuenta" id="b9c6ffea-0e6e-46de-9544-4ba6c94d00d1" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.165">
+    <testcase name="AT-13 tiempo de respuesta &lt; 1500 ms" time="0.207" classname="Hu09BloqueoPorIntentosFallidosAt13CincoIntentosFallidosBloqueanLaCuenta"/>
+    <testcase name="AT-13 responde 401" time="0.207" classname="Hu09BloqueoPorIntentosFallidosAt13CincoIntentosFallidosBloqueanLaCuenta"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-14 · Bloqueada, ni la clave correcta entra" id="e99714b9-3b50-447b-a988-01fe7739169f" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.213">
+    <testcase name="AT-14 tiempo de respuesta &lt; 1500 ms" time="0.213" classname="Hu09BloqueoPorIntentosFallidosAt14BloqueadaNiLaClaveCorrectaEntra"/>
+    <testcase name="AT-14 responde 401" time="0.213" classname="Hu09BloqueoPorIntentosFallidosAt14BloqueadaNiLaClaveCorrectaEntra"/>
+    <testcase name="AT-14 el mensaje no revela el bloqueo" time="0.213" classname="Hu09BloqueoPorIntentosFallidosAt14BloqueadaNiLaClaveCorrectaEntra"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-15 · La auditoría registra el bloqueo" id="0d4c9811-ae72-46a2-bb99-e2e6eda0b103" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.104">
+    <testcase name="AT-15 tiempo de respuesta &lt; 1500 ms" time="0.104" classname="Hu09BloqueoPorIntentosFallidosAt15LaAuditoriaRegistraElBloqueo"/>
+    <testcase name="AT-15 responde 200" time="0.104" classname="Hu09BloqueoPorIntentosFallidosAt15LaAuditoriaRegistraElBloqueo"/>
+    <testcase name="AT-15 hay un CUENTA_BLOQUEADA del usuario" time="0.104" classname="Hu09BloqueoPorIntentosFallidosAt15LaAuditoriaRegistraElBloqueo"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-16 · El administrador desbloquea" id="fd17b2f3-5401-449a-a170-7009f91a49be" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.060">
+    <testcase name="AT-16 tiempo de respuesta &lt; 1500 ms" time="0.060" classname="Hu09BloqueoPorIntentosFallidosAt16ElAdministradorDesbloquea"/>
+    <testcase name="AT-16 responde 200" time="0.060" classname="Hu09BloqueoPorIntentosFallidosAt16ElAdministradorDesbloquea"/>
+    <testcase name="AT-16 queda sin bloqueo y contador en 0" time="0.060" classname="Hu09BloqueoPorIntentosFallidosAt16ElAdministradorDesbloquea"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-17 · Tras el desbloqueo entra de inmediato" id="e50388b0-45ea-4826-81aa-32dac86f3843" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.140">
+    <testcase name="AT-17 tiempo de respuesta &lt; 1500 ms" time="0.140" classname="Hu09BloqueoPorIntentosFallidosAt17TrasElDesbloqueoEntraDeInmediato"/>
+    <testcase name="AT-17 responde 200" time="0.140" classname="Hu09BloqueoPorIntentosFallidosAt17TrasElDesbloqueoEntraDeInmediato"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-18 · Desactivar al usuario cierra su sesión" id="c5289b0d-719e-479f-ac35-26bae6fe2a13" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.060">
+    <testcase name="AT-18 tiempo de respuesta &lt; 1500 ms" time="0.060" classname="Hu09BloqueoPorIntentosFallidosAt18DesactivarAlUsuarioCierraSuSesion"/>
+    <testcase name="AT-18 responde 200" time="0.060" classname="Hu09BloqueoPorIntentosFallidosAt18DesactivarAlUsuarioCierraSuSesion"/>
+  </testsuite>
+  <testsuite name="HU-09 · Bloqueo por intentos fallidos / AT-19 · El token del usuario desactivado ya no sirve" id="b1b12326-4649-4b35-8d1e-cea240692431" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.053">
+    <testcase name="AT-19 tiempo de respuesta &lt; 1500 ms" time="0.053" classname="Hu09BloqueoPorIntentosFallidosAt19ElTokenDelUsuarioDesactivadoYaNoSirve"/>
+    <testcase name="AT-19 responde 401" time="0.053" classname="Hu09BloqueoPorIntentosFallidosAt19ElTokenDelUsuarioDesactivadoYaNoSirve"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-20 · Registrar un envío devuelve el comprobante" id="c9b68c2d-fb6d-4d2f-83d4-a9f10cf4d923" timestamp="2026-11-24T22:42:38.274Z" tests="4" failures="0" errors="0" time="0.205">
+    <testcase name="AT-20 tiempo de respuesta &lt; 1500 ms" time="0.205" classname="Hu14Hu13ComprobanteYDatosPersonalesAt20RegistrarUnEnvioDevuelveElComprobante"/>
+    <testcase name="AT-20 responde 202" time="0.205" classname="Hu14Hu13ComprobanteYDatosPersonalesAt20RegistrarUnEnvioDevuelveElComprobante"/>
+    <testcase name="AT-20 guía con formato TF + 12" time="0.205" classname="Hu14Hu13ComprobanteYDatosPersonalesAt20RegistrarUnEnvioDevuelveElComprobante"/>
+    <testcase name="AT-20 comprobante con seis campos" time="0.205" classname="Hu14Hu13ComprobanteYDatosPersonalesAt20RegistrarUnEnvioDevuelveElComprobante"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-21 · Reimprimir el comprobante" id="4f496498-7a0b-490c-8981-011b0934cb6e" timestamp="2026-11-24T22:42:38.274Z" tests="4" failures="0" errors="0" time="0.100">
+    <testcase name="AT-21 tiempo de respuesta &lt; 1500 ms" time="0.100" classname="Hu14Hu13ComprobanteYDatosPersonalesAt21ReimprimirElComprobante"/>
+    <testcase name="AT-21 responde 200" time="0.100" classname="Hu14Hu13ComprobanteYDatosPersonalesAt21ReimprimirElComprobante"/>
+    <testcase name="AT-21 sin teléfonos ni direcciones" time="0.100" classname="Hu14Hu13ComprobanteYDatosPersonalesAt21ReimprimirElComprobante"/>
+    <testcase name="AT-21 no se guarda en caché" time="0.100" classname="Hu14Hu13ComprobanteYDatosPersonalesAt21ReimprimirElComprobante"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-22 · Comprobante sin sesión" id="e61e7c89-5c18-43c5-8537-f04d528120c7" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.011">
+    <testcase name="AT-22 tiempo de respuesta &lt; 1500 ms" time="0.011" classname="Hu14Hu13ComprobanteYDatosPersonalesAt22ComprobanteSinSesion"/>
+    <testcase name="AT-22 responde 401" time="0.011" classname="Hu14Hu13ComprobanteYDatosPersonalesAt22ComprobanteSinSesion"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-23 · Comprobante de una guía inexistente" id="4114e440-565c-4982-95c4-979a20784a77" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.048">
+    <testcase name="AT-23 tiempo de respuesta &lt; 1500 ms" time="0.048" classname="Hu14Hu13ComprobanteYDatosPersonalesAt23ComprobanteDeUnaGuiaInexistente"/>
+    <testcase name="AT-23 responde 404" time="0.048" classname="Hu14Hu13ComprobanteYDatosPersonalesAt23ComprobanteDeUnaGuiaInexistente"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-24 · El operador ve la ficha enmascarada" id="b77689ad-9361-48e6-a3ed-8fc327a75968" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.106">
+    <testcase name="AT-24 tiempo de respuesta &lt; 1500 ms" time="0.106" classname="Hu14Hu13ComprobanteYDatosPersonalesAt24ElOperadorVeLaFichaEnmascarada"/>
+    <testcase name="AT-24 responde 200" time="0.106" classname="Hu14Hu13ComprobanteYDatosPersonalesAt24ElOperadorVeLaFichaEnmascarada"/>
+    <testcase name="AT-24 teléfono y documento enmascarados" time="0.106" classname="Hu14Hu13ComprobanteYDatosPersonalesAt24ElOperadorVeLaFichaEnmascarada"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-25 · El operador no ve la ficha completa" id="1afea813-bd45-4dd6-ae97-88f788c48724" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.040">
+    <testcase name="AT-25 tiempo de respuesta &lt; 1500 ms" time="0.040" classname="Hu14Hu13ComprobanteYDatosPersonalesAt25ElOperadorNoVeLaFichaCompleta"/>
+    <testcase name="AT-25 responde 403" time="0.040" classname="Hu14Hu13ComprobanteYDatosPersonalesAt25ElOperadorNoVeLaFichaCompleta"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-26 · El administrador ve la ficha completa" id="64d10cc4-3de4-447e-9618-b8b68e1860b7" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.070">
+    <testcase name="AT-26 tiempo de respuesta &lt; 1500 ms" time="0.070" classname="Hu14Hu13ComprobanteYDatosPersonalesAt26ElAdministradorVeLaFichaCompleta"/>
+    <testcase name="AT-26 responde 200" time="0.070" classname="Hu14Hu13ComprobanteYDatosPersonalesAt26ElAdministradorVeLaFichaCompleta"/>
+    <testcase name="AT-26 datos sin enmascarar" time="0.070" classname="Hu14Hu13ComprobanteYDatosPersonalesAt26ElAdministradorVeLaFichaCompleta"/>
+  </testsuite>
+  <testsuite name="HU-14 / HU-13 · Comprobante y datos personales / AT-27 · Rastreo anónimo con datos mínimos" id="fd06b742-59ec-47d1-b863-77151957d050" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.088">
+    <testcase name="AT-27 tiempo de respuesta &lt; 1500 ms" time="0.088" classname="Hu14Hu13ComprobanteYDatosPersonalesAt27RastreoAnonimoConDatosMinimos"/>
+    <testcase name="AT-27 responde 200" time="0.088" classname="Hu14Hu13ComprobanteYDatosPersonalesAt27RastreoAnonimoConDatosMinimos"/>
+    <testcase name="AT-27 nombres enmascarados, sin dirección y marcado restricted" time="0.088" classname="Hu14Hu13ComprobanteYDatosPersonalesAt27RastreoAnonimoConDatosMinimos"/>
+  </testsuite>
+  <testsuite name="HU-11 · Reportes solo para supervisión / AT-28 · El operador ya no ve los reportes" id="b6fbb312-71ab-4cb9-8614-62b3e6f7c737" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.186">
+    <testcase name="AT-28 tiempo de respuesta &lt; 1500 ms" time="0.186" classname="Hu11ReportesSoloParaSupervisionAt28ElOperadorYaNoVeLosReportes"/>
+    <testcase name="AT-28 responde 403" time="0.186" classname="Hu11ReportesSoloParaSupervisionAt28ElOperadorYaNoVeLosReportes"/>
+  </testsuite>
+  <testsuite name="HU-11 · Reportes solo para supervisión / AT-29 · El supervisor ve los tiempos de tránsito" id="982e770f-f808-421e-8562-660e932fd4f3" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.223">
+    <testcase name="AT-29 tiempo de respuesta &lt; 1500 ms" time="0.223" classname="Hu11ReportesSoloParaSupervisionAt29ElSupervisorVeLosTiemposDeTransito"/>
+    <testcase name="AT-29 responde 200" time="0.223" classname="Hu11ReportesSoloParaSupervisionAt29ElSupervisorVeLosTiemposDeTransito"/>
+    <testcase name="AT-29 trae el periodo pedido" time="0.223" classname="Hu11ReportesSoloParaSupervisionAt29ElSupervisorVeLosTiemposDeTransito"/>
+  </testsuite>
+  <testsuite name="HU-11 · Reportes solo para supervisión / AT-30 · Periodo anterior al inicio de la operación" id="171569d9-6b25-4c01-bbaa-51ee1e5bedb0" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.040">
+    <testcase name="AT-30 tiempo de respuesta &lt; 1500 ms" time="0.040" classname="Hu11ReportesSoloParaSupervisionAt30PeriodoAnteriorAlInicioDeLaOperacion"/>
+    <testcase name="AT-30 responde 400" time="0.040" classname="Hu11ReportesSoloParaSupervisionAt30PeriodoAnteriorAlInicioDeLaOperacion"/>
+    <testcase name="AT-30 explica el límite" time="0.040" classname="Hu11ReportesSoloParaSupervisionAt30PeriodoAnteriorAlInicioDeLaOperacion"/>
+  </testsuite>
+  <testsuite name="HU-11 · Reportes solo para supervisión / AT-31 · Reporte sin sesión" id="4684ba87-f1ef-4e15-809a-2f4d1b16eb22" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.039">
+    <testcase name="AT-31 tiempo de respuesta &lt; 1500 ms" time="0.039" classname="Hu11ReportesSoloParaSupervisionAt31ReporteSinSesion"/>
+    <testcase name="AT-31 responde 401" time="0.039" classname="Hu11ReportesSoloParaSupervisionAt31ReporteSinSesion"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-32 · Excepción sobre un envío sin movimientos" id="e34e2af3-5d2f-4e92-9afb-000a3f0dd027" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.939">
+    <testcase name="AT-32 tiempo de respuesta &lt; 1500 ms" time="0.939" classname="Hu16ExcepcionesLogisticasAt32ExcepcionSobreUnEnvioSinMovimientos"/>
+    <testcase name="AT-32 responde 422" time="0.939" classname="Hu16ExcepcionesLogisticasAt32ExcepcionSobreUnEnvioSinMovimientos"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-33 · Recibir el envío en el centro de origen" id="9264d268-abe2-48a3-b702-3f9caa6f46d2" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.140">
+    <testcase name="AT-33 tiempo de respuesta &lt; 1500 ms" time="0.140" classname="Hu16ExcepcionesLogisticasAt33RecibirElEnvioEnElCentroDeOrigen"/>
+    <testcase name="AT-33 responde 202" time="0.140" classname="Hu16ExcepcionesLogisticasAt33RecibirElEnvioEnElCentroDeOrigen"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-34 · Excepción sin motivo" id="894910a5-7550-4f82-a1fa-b2b364982a14" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.058">
+    <testcase name="AT-34 tiempo de respuesta &lt; 1500 ms" time="0.058" classname="Hu16ExcepcionesLogisticasAt34ExcepcionSinMotivo"/>
+    <testcase name="AT-34 responde 400" time="0.058" classname="Hu16ExcepcionesLogisticasAt34ExcepcionSinMotivo"/>
+    <testcase name="AT-34 lista los motivos válidos" time="0.058" classname="Hu16ExcepcionesLogisticasAt34ExcepcionSinMotivo"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-35 · Excepción con un motivo que no existe" id="f4fe76da-18d9-466b-9904-5dc1f13c4fb1" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="1" errors="0" time="0.038">
+    <testcase name="AT-35 tiempo de respuesta &lt; 1500 ms" time="0.038" classname="Hu16ExcepcionesLogisticasAt35ExcepcionConUnMotivoQueNoExiste"/>
+    <testcase name="AT-35 responde 400" time="0.038" classname="Hu16ExcepcionesLogisticasAt35ExcepcionConUnMotivoQueNoExiste"/>
+    <testcase name="AT-35 el error no expone clases Java" time="0.038" classname="Hu16ExcepcionesLogisticasAt35ExcepcionConUnMotivoQueNoExiste">
+      <failure type="AssertionFailure" message="expected '{&quot;detail&quot;:&quot;Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: ae1781b1-0493-418b-82e6-8ae4442e1d71.]]>
+        <![CDATA[Collection name: TrackFlow · Sprint 3 · Pruebas de API.]]>
+        <![CDATA[Request name: HU-16 · Excepciones logísticas / AT-35 · Excepción con un motivo que no existe.]]>
+        <![CDATA[Test description: AT-35 el error no expone clases Java.]]>
+        <![CDATA[Error message: expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/.]]>
+        <![CDATA[Stacktrace: AssertionError: expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/
+   at Object.eval sandbox-script.js:3:38).]]>
+      </failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-36 · Registrar la excepción con motivo y nota" id="4b285566-264e-49e9-8783-c296529fee01" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.246">
+    <testcase name="AT-36 tiempo de respuesta &lt; 1500 ms" time="0.246" classname="Hu16ExcepcionesLogisticasAt36RegistrarLaExcepcionConMotivoYNota"/>
+    <testcase name="AT-36 responde 202" time="0.246" classname="Hu16ExcepcionesLogisticasAt36RegistrarLaExcepcionConMotivoYNota"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-37 · El historial muestra la excepción y el estado no retrocede" id="b08e3c0d-7ee5-45f3-b470-293492dd28f8" timestamp="2026-11-24T22:42:38.274Z" tests="4" failures="0" errors="0" time="0.255">
+    <testcase name="AT-37 tiempo de respuesta &lt; 1500 ms" time="0.255" classname="Hu16ExcepcionesLogisticasAt37ElHistorialMuestraLaExcepcionYElEstadoNoRetrocede"/>
+    <testcase name="AT-37 responde 200" time="0.255" classname="Hu16ExcepcionesLogisticasAt37ElHistorialMuestraLaExcepcionYElEstadoNoRetrocede"/>
+    <testcase name="AT-37 hay dos movimientos y el último es la excepción" time="0.255" classname="Hu16ExcepcionesLogisticasAt37ElHistorialMuestraLaExcepcionYElEstadoNoRetrocede"/>
+    <testcase name="AT-37 el estado sigue en centro de distribución" time="0.255" classname="Hu16ExcepcionesLogisticasAt37ElHistorialMuestraLaExcepcionYElEstadoNoRetrocede"/>
+  </testsuite>
+  <testsuite name="HU-16 · Excepciones logísticas / AT-38 · El supervisor no registra movimientos" id="97d356a3-22fc-404a-b882-ee1363e5a7fe" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="AT-38 tiempo de respuesta &lt; 1500 ms" time="0.030" classname="Hu16ExcepcionesLogisticasAt38ElSupervisorNoRegistraMovimientos"/>
+    <testcase name="AT-38 responde 403" time="0.030" classname="Hu16ExcepcionesLogisticasAt38ElSupervisorNoRegistraMovimientos"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-39 · Horario de atención público" id="2bcf99c1-2a07-45a8-a139-5ac771d81e7a" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.096">
+    <testcase name="AT-39 tiempo de respuesta &lt; 1500 ms" time="0.096" classname="Hu20RecogidasADomicilioAt39HorarioDeAtencionPublico"/>
+    <testcase name="AT-39 responde 200" time="0.096" classname="Hu20RecogidasADomicilioAt39HorarioDeAtencionPublico"/>
+    <testcase name="AT-39 cinco franjas de 08:00 a 18:00" time="0.096" classname="Hu20RecogidasADomicilioAt39HorarioDeAtencionPublico"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-40 · Autoservicio: solicitar una recogida" id="5e29a34b-8222-4ddf-8d17-b6b89703756e" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.248">
+    <testcase name="AT-40 tiempo de respuesta &lt; 1500 ms" time="0.248" classname="Hu20RecogidasADomicilioAt40AutoservicioSolicitarUnaRecogida"/>
+    <testcase name="AT-40 responde 202" time="0.248" classname="Hu20RecogidasADomicilioAt40AutoservicioSolicitarUnaRecogida"/>
+    <testcase name="AT-40 número RC y código de 8 caracteres" time="0.248" classname="Hu20RecogidasADomicilioAt40AutoservicioSolicitarUnaRecogida"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-41 · Consultar la recogida con el código de gestión" id="e85d1212-8380-40d7-9398-bc4e806bfd4c" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.169">
+    <testcase name="AT-41 tiempo de respuesta &lt; 1500 ms" time="0.169" classname="Hu20RecogidasADomicilioAt41ConsultarLaRecogidaConElCodigoDeGestion"/>
+    <testcase name="AT-41 responde 200" time="0.169" classname="Hu20RecogidasADomicilioAt41ConsultarLaRecogidaConElCodigoDeGestion"/>
+    <testcase name="AT-41 queda solicitada" time="0.169" classname="Hu20RecogidasADomicilioAt41ConsultarLaRecogidaConElCodigoDeGestion"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-42 · Un código equivocado responde igual que una recogida inexistente" id="dcbd3fd6-ea57-49fb-87a1-902577a6b9ef" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.110">
+    <testcase name="AT-42 tiempo de respuesta &lt; 1500 ms" time="0.110" classname="Hu20RecogidasADomicilioAt42UnCodigoEquivocadoRespondeIgualQueUnaRecogidaInexistente"/>
+    <testcase name="AT-42 responde 404" time="0.110" classname="Hu20RecogidasADomicilioAt42UnCodigoEquivocadoRespondeIgualQueUnaRecogidaInexistente"/>
+    <testcase name="AT-42 mensaje que no revela cuál falló" time="0.110" classname="Hu20RecogidasADomicilioAt42UnCodigoEquivocadoRespondeIgualQueUnaRecogidaInexistente"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-43 · No se recoge los domingos" id="0d72a72d-7243-48f9-85dc-6f87886a032f" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.033">
+    <testcase name="AT-43 tiempo de respuesta &lt; 1500 ms" time="0.033" classname="Hu20RecogidasADomicilioAt43NoSeRecogeLosDomingos"/>
+    <testcase name="AT-43 responde 422" time="0.033" classname="Hu20RecogidasADomicilioAt43NoSeRecogeLosDomingos"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-44 · Peso por encima de 100 kg" id="95a795ad-4679-4733-ba3a-6ba387db2a01" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.024">
+    <testcase name="AT-44 tiempo de respuesta &lt; 1500 ms" time="0.024" classname="Hu20RecogidasADomicilioAt44PesoPorEncimaDe100Kg"/>
+    <testcase name="AT-44 responde 400" time="0.024" classname="Hu20RecogidasADomicilioAt44PesoPorEncimaDe100Kg"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-45 · El autoservicio no puede vincular una guía" id="c8f9fe17-8892-46dd-93e8-e80360840325" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.013">
+    <testcase name="AT-45 tiempo de respuesta &lt; 1500 ms" time="0.013" classname="Hu20RecogidasADomicilioAt45ElAutoservicioNoPuedeVincularUnaGuia"/>
+    <testcase name="AT-45 responde 400" time="0.013" classname="Hu20RecogidasADomicilioAt45ElAutoservicioNoPuedeVincularUnaGuia"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-46 · Cancelar por autoservicio" id="3d4998b3-8e5f-40c9-9a57-217f3bf3ded3" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.121">
+    <testcase name="AT-46 tiempo de respuesta &lt; 1500 ms" time="0.121" classname="Hu20RecogidasADomicilioAt46CancelarPorAutoservicio"/>
+    <testcase name="AT-46 responde 202" time="0.121" classname="Hu20RecogidasADomicilioAt46CancelarPorAutoservicio"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-47 · Registrar el envío que se va a recoger" id="18f1e514-c36a-48b2-8216-396ff5b94ac1" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.074">
+    <testcase name="AT-47 tiempo de respuesta &lt; 1500 ms" time="0.074" classname="Hu20RecogidasADomicilioAt47RegistrarElEnvioQueSeVaARecoger"/>
+    <testcase name="AT-47 responde 202" time="0.074" classname="Hu20RecogidasADomicilioAt47RegistrarElEnvioQueSeVaARecoger"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-48 · El operador pide la recogida con la guía" id="79ef267d-9069-4e32-82b0-c251f4d04e4c" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.233">
+    <testcase name="AT-48 tiempo de respuesta &lt; 1500 ms" time="0.233" classname="Hu20RecogidasADomicilioAt48ElOperadorPideLaRecogidaConLaGuia"/>
+    <testcase name="AT-48 responde 202" time="0.233" classname="Hu20RecogidasADomicilioAt48ElOperadorPideLaRecogidaConLaGuia"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-49 · La misma guía no admite otra recogida activa" id="2e60d3fb-d243-4aa0-9dc4-597259903e95" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.103">
+    <testcase name="AT-49 tiempo de respuesta &lt; 1500 ms" time="0.103" classname="Hu20RecogidasADomicilioAt49LaMismaGuiaNoAdmiteOtraRecogidaActiva"/>
+    <testcase name="AT-49 responde 409" time="0.103" classname="Hu20RecogidasADomicilioAt49LaMismaGuiaNoAdmiteOtraRecogidaActiva"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-50 · Asignar la recogida al operador" id="afdf4c27-808a-45c4-aac6-7da214363344" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.087">
+    <testcase name="AT-50 tiempo de respuesta &lt; 1500 ms" time="0.087" classname="Hu20RecogidasADomicilioAt50AsignarLaRecogidaAlOperador"/>
+    <testcase name="AT-50 responde 202" time="0.087" classname="Hu20RecogidasADomicilioAt50AsignarLaRecogidaAlOperador"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-51 · Despachar" id="a9c3bd8e-56b6-4d32-a078-4fcf3c584755" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.087">
+    <testcase name="AT-51 tiempo de respuesta &lt; 1500 ms" time="0.087" classname="Hu20RecogidasADomicilioAt51Despachar"/>
+    <testcase name="AT-51 responde 202" time="0.087" classname="Hu20RecogidasADomicilioAt51Despachar"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-52 · Completar" id="06431bfd-2c24-4d3f-8856-0646f7d32ef4" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.028">
+    <testcase name="AT-52 tiempo de respuesta &lt; 1500 ms" time="0.028" classname="Hu20RecogidasADomicilioAt52Completar"/>
+    <testcase name="AT-52 responde 202" time="0.028" classname="Hu20RecogidasADomicilioAt52Completar"/>
+  </testsuite>
+  <testsuite name="HU-20 · Recogidas a domicilio / AT-53 · El envío recogido queda en custodia" id="8b561b91-245b-4b77-b0e3-0a9f6dde2616" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.034">
+    <testcase name="AT-53 tiempo de respuesta &lt; 1500 ms" time="0.031" classname="Hu20RecogidasADomicilioAt53ElEnvioRecogidoQuedaEnCustodia"/>
+    <testcase name="AT-53 responde 200" time="0.031" classname="Hu20RecogidasADomicilioAt53ElEnvioRecogidoQuedaEnCustodia"/>
+    <testcase name="AT-53 estado IN_CUSTODY (tras 3 consultas)" time="0.031" classname="Hu20RecogidasADomicilioAt53ElEnvioRecogidoQuedaEnCustodia"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-54 · Radicar una queja" id="3d67de24-bf52-49ad-8fa0-b02f90040b0f" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.080">
+    <testcase name="AT-54 tiempo de respuesta &lt; 1500 ms" time="0.080" classname="Hu19PeticionesQuejasYReclamosAt54RadicarUnaQueja"/>
+    <testcase name="AT-54 responde 201" time="0.080" classname="Hu19PeticionesQuejasYReclamosAt54RadicarUnaQueja"/>
+    <testcase name="AT-54 radicado PQR-AAAA-NNNNN en estado RECIBIDA" time="0.080" classname="Hu19PeticionesQuejasYReclamosAt54RadicarUnaQueja"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-55 · Descripción de 19 caracteres (límite inferior)" id="aaa23cc5-fb4f-403d-8677-6755a771f1e6" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.022">
+    <testcase name="AT-55 tiempo de respuesta &lt; 1500 ms" time="0.022" classname="Hu19PeticionesQuejasYReclamosAt55DescripcionDe19CaracteresLimiteInferior"/>
+    <testcase name="AT-55 responde 400" time="0.022" classname="Hu19PeticionesQuejasYReclamosAt55DescripcionDe19CaracteresLimiteInferior"/>
+    <testcase name="AT-55 indica el rango 20 a 2000" time="0.022" classname="Hu19PeticionesQuejasYReclamosAt55DescripcionDe19CaracteresLimiteInferior"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-56 · Consultar con radicado y correo" id="7a4f63f7-ff62-4b49-b5af-db0c4ef35317" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.126">
+    <testcase name="AT-56 tiempo de respuesta &lt; 1500 ms" time="0.126" classname="Hu19PeticionesQuejasYReclamosAt56ConsultarConRadicadoYCorreo"/>
+    <testcase name="AT-56 responde 200" time="0.126" classname="Hu19PeticionesQuejasYReclamosAt56ConsultarConRadicadoYCorreo"/>
+    <testcase name="AT-56 sin respuesta mientras no se resuelva" time="0.126" classname="Hu19PeticionesQuejasYReclamosAt56ConsultarConRadicadoYCorreo"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-57 · Consultar con un correo ajeno" id="eb418ebd-e574-42e5-9e69-a37b66ee2825" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.031">
+    <testcase name="AT-57 tiempo de respuesta &lt; 1500 ms" time="0.031" classname="Hu19PeticionesQuejasYReclamosAt57ConsultarConUnCorreoAjeno"/>
+    <testcase name="AT-57 responde 404" time="0.031" classname="Hu19PeticionesQuejasYReclamosAt57ConsultarConUnCorreoAjeno"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-58 · El operador no gestiona PQR" id="7c5703e2-3b62-4fd5-bbff-db035339961d" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.030">
+    <testcase name="AT-58 tiempo de respuesta &lt; 1500 ms" time="0.030" classname="Hu19PeticionesQuejasYReclamosAt58ElOperadorNoGestionaPqr"/>
+    <testcase name="AT-58 responde 403" time="0.030" classname="Hu19PeticionesQuejasYReclamosAt58ElOperadorNoGestionaPqr"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-59 · No se salta de RECIBIDA a RESUELTA" id="6ea36870-1bfd-4739-90ca-b93d56dcd19a" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.087">
+    <testcase name="AT-59 tiempo de respuesta &lt; 1500 ms" time="0.087" classname="Hu19PeticionesQuejasYReclamosAt59NoSeSaltaDeRecibidaAResuelta"/>
+    <testcase name="AT-59 responde 409" time="0.087" classname="Hu19PeticionesQuejasYReclamosAt59NoSeSaltaDeRecibidaAResuelta"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-60 · Pasar a EN_TRAMITE" id="505b533d-76a7-452a-9e08-9fcb46546eed" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.074">
+    <testcase name="AT-60 tiempo de respuesta &lt; 1500 ms" time="0.074" classname="Hu19PeticionesQuejasYReclamosAt60PasarAEnTramite"/>
+    <testcase name="AT-60 responde 200" time="0.074" classname="Hu19PeticionesQuejasYReclamosAt60PasarAEnTramite"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-61 · Resolver sin respuesta" id="e35d679c-ba64-45dd-910d-2c66a0af12ac" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.067">
+    <testcase name="AT-61 tiempo de respuesta &lt; 1500 ms" time="0.067" classname="Hu19PeticionesQuejasYReclamosAt61ResolverSinRespuesta"/>
+    <testcase name="AT-61 responde 400" time="0.067" classname="Hu19PeticionesQuejasYReclamosAt61ResolverSinRespuesta"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-62 · Resolver con respuesta" id="ddb5b792-22a5-4885-89a1-1a4ba33beaba" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.049">
+    <testcase name="AT-62 tiempo de respuesta &lt; 1500 ms" time="0.049" classname="Hu19PeticionesQuejasYReclamosAt62ResolverConRespuesta"/>
+    <testcase name="AT-62 responde 200" time="0.049" classname="Hu19PeticionesQuejasYReclamosAt62ResolverConRespuesta"/>
+  </testsuite>
+  <testsuite name="HU-19 · Peticiones, quejas y reclamos / AT-63 · El solicitante ve la respuesta" id="72f224a5-c5a1-4342-bd76-997909f8548a" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.030">
+    <testcase name="AT-63 tiempo de respuesta &lt; 1500 ms" time="0.030" classname="Hu19PeticionesQuejasYReclamosAt63ElSolicitanteVeLaRespuesta"/>
+    <testcase name="AT-63 responde 200" time="0.030" classname="Hu19PeticionesQuejasYReclamosAt63ElSolicitanteVeLaRespuesta"/>
+    <testcase name="AT-63 estado RESUELTA con respuesta e historial de 3 pasos" time="0.030" classname="Hu19PeticionesQuejasYReclamosAt63ElSolicitanteVeLaRespuesta"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-64 · Abrir una conversación" id="fe5fcfea-c178-41d8-8bc1-1c98a5f978c3" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.016">
+    <testcase name="AT-64 tiempo de respuesta &lt; 1500 ms" time="0.016" classname="Hu21ChatbotDePreguntasFrecuentesAt64AbrirUnaConversacion"/>
+    <testcase name="AT-64 responde 201" time="0.016" classname="Hu21ChatbotDePreguntasFrecuentesAt64AbrirUnaConversacion"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-65 · Pregunta frecuente" id="eb423e56-19ee-4d8b-b1c8-c87d5cf1441a" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.051">
+    <testcase name="AT-65 tiempo de respuesta &lt; 1500 ms" time="0.051" classname="Hu21ChatbotDePreguntasFrecuentesAt65PreguntaFrecuente"/>
+    <testcase name="AT-65 responde 200" time="0.051" classname="Hu21ChatbotDePreguntasFrecuentesAt65PreguntaFrecuente"/>
+    <testcase name="AT-65 responde la intención como_rastrear" time="0.051" classname="Hu21ChatbotDePreguntasFrecuentesAt65PreguntaFrecuente"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-66 · Pregunta fuera de tema ofrece radicar una PQR" id="9fef3a4d-371e-44c6-83ab-6ac5a540896f" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.015">
+    <testcase name="AT-66 tiempo de respuesta &lt; 1500 ms" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt66PreguntaFueraDeTemaOfreceRadicarUnaPqr"/>
+    <testcase name="AT-66 responde 200" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt66PreguntaFueraDeTemaOfreceRadicarUnaPqr"/>
+    <testcase name="AT-66 FUERA_DE_TEMA con acción ABRIR_PQR" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt66PreguntaFueraDeTemaOfreceRadicarUnaPqr"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-67 · Un número de guía no consulta datos del envío" id="b9d1a083-3df2-42c8-bbc6-db9846a8fc6b" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.010">
+    <testcase name="AT-67 tiempo de respuesta &lt; 1500 ms" time="0.010" classname="Hu21ChatbotDePreguntasFrecuentesAt67UnNumeroDeGuiaNoConsultaDatosDelEnvio"/>
+    <testcase name="AT-67 responde 200" time="0.010" classname="Hu21ChatbotDePreguntasFrecuentesAt67UnNumeroDeGuiaNoConsultaDatosDelEnvio"/>
+    <testcase name="AT-67 manda a la página de rastreo sin mostrar datos" time="0.010" classname="Hu21ChatbotDePreguntasFrecuentesAt67UnNumeroDeGuiaNoConsultaDatosDelEnvio"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-68 · Mensaje de 301 caracteres" id="cf659f84-21ca-458a-8229-e22b432e68ef" timestamp="2026-11-24T22:42:38.274Z" tests="2" failures="0" errors="0" time="0.015">
+    <testcase name="AT-68 tiempo de respuesta &lt; 1500 ms" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt68MensajeDe301Caracteres"/>
+    <testcase name="AT-68 responde 400" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt68MensajeDe301Caracteres"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-69 · Sesión inexistente" id="b8f2654d-f18b-4048-a05f-870271a81255" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="0" errors="0" time="0.015">
+    <testcase name="AT-69 tiempo de respuesta &lt; 1500 ms" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt69SesionInexistente"/>
+    <testcase name="AT-69 responde 400" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt69SesionInexistente"/>
+    <testcase name="AT-69 pide crear otra sesión" time="0.015" classname="Hu21ChatbotDePreguntasFrecuentesAt69SesionInexistente"/>
+  </testsuite>
+  <testsuite name="HU-21 · Chatbot de preguntas frecuentes / AT-70 · Identificador de sesión mal formado" id="b57cc097-3b1a-4bc6-92c6-f791fed0a0d4" timestamp="2026-11-24T22:42:38.274Z" tests="3" failures="1" errors="0" time="0.020">
+    <testcase name="AT-70 tiempo de respuesta &lt; 1500 ms" time="0.020" classname="Hu21ChatbotDePreguntasFrecuentesAt70IdentificadorDeSesionMalFormado"/>
+    <testcase name="AT-70 responde 400" time="0.020" classname="Hu21ChatbotDePreguntasFrecuentesAt70IdentificadorDeSesionMalFormado"/>
+    <testcase name="AT-70 el error no expone clases Java" time="0.020" classname="Hu21ChatbotDePreguntasFrecuentesAt70IdentificadorDeSesionMalFormado">
+      <failure type="AssertionFailure" message="expected '{&quot;detail&quot;:&quot;Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/">
+        <![CDATA[Failed 1 times.]]>
+        <![CDATA[Collection JSON ID: ae1781b1-0493-418b-82e6-8ae4442e1d71.]]>
+        <![CDATA[Collection name: TrackFlow · Sprint 3 · Pruebas de API.]]>
+        <![CDATA[Request name: HU-21 · Chatbot de preguntas frecuentes / AT-70 · Identificador de sesión mal formado.]]>
+        <![CDATA[Test description: AT-70 el error no expone clases Java.]]>
+        <![CDATA[Error message: expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/.]]>
+        <![CDATA[Stacktrace: AssertionError: expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/
+   at Object.eval sandbox-script.js:3:73).]]>
+      </failure>
+    </testcase>
+  </testsuite>
+</testsuites>

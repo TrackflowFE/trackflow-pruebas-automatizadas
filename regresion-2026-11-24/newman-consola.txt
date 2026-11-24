@@ -1,0 +1,500 @@
+newman
+
+TrackFlow · Sprint 3 · Pruebas de API
+
+❏ 00 · Preparación: ingreso de los tres roles
+↳ AT-00 · Ingreso admin
+  POST http://localhost:18080/api/auth/login [200 OK, 784B, 212ms]
+  ✓  AT-00 tiempo de respuesta < 1500 ms
+  ✓  AT-00 responde 200
+  ✓  AT-00 el token es de tipo Bearer
+
+↳ AT-00 · Ingreso operador
+  POST http://localhost:18080/api/auth/login [200 OK, 795B, 121ms]
+  ✓  AT-00 tiempo de respuesta < 1500 ms
+  ✓  AT-00 responde 200
+  ✓  AT-00 el token es de tipo Bearer
+
+↳ AT-00 · Ingreso supervisor
+  POST http://localhost:18080/api/auth/login [200 OK, 802B, 115ms]
+  ✓  AT-00 tiempo de respuesta < 1500 ms
+  ✓  AT-00 responde 200
+  ✓  AT-00 el token es de tipo Bearer
+
+❏ HU-11 · Gestión de usuarios, roles y permisos
+↳ AT-01 · El administrador crea un usuario
+  POST http://localhost:18080/api/admin/usuarios [201 Created, 576B, 364ms]
+  ✓  AT-01 tiempo de respuesta < 1500 ms
+  ✓  AT-01 responde 201
+  ✓  AT-01 nace activo, sin bloqueo y con su rol
+
+↳ AT-02 · Un operador no puede crear usuarios
+  POST http://localhost:18080/api/admin/usuarios [403 Forbidden, 598B, 48ms]
+  ✓  AT-02 tiempo de respuesta < 1500 ms
+  ✓  AT-02 responde 403
+
+↳ AT-03 · Rol desconocido
+  POST http://localhost:18080/api/admin/usuarios [400 Bad Request, 547B, 53ms]
+  ✓  AT-03 tiempo de respuesta < 1500 ms
+  ✓  AT-03 responde 400
+  ✓  AT-03 dice qué roles existen
+
+↳ AT-04 · Usuario duplicado
+  POST http://localhost:18080/api/admin/usuarios [409 Conflict, 550B, 82ms]
+  ✓  AT-04 tiempo de respuesta < 1500 ms
+  ✓  AT-04 responde 409
+
+↳ AT-05 · El último administrador no puede perder su rol
+  PUT http://localhost:18080/api/admin/usuarios/admin/roles [409 Conflict, 613B, 322ms]
+  ✓  AT-05 tiempo de respuesta < 1500 ms
+  ✓  AT-05 responde 409
+
+❏ HU-10 · Contraseña temporal, cambio y recuperación
+↳ AT-06 · Ingreso con la clave temporal: token sin roles
+  POST http://localhost:18080/api/auth/login [200 OK, 777B, 198ms]
+  ✓  AT-06 tiempo de respuesta < 1500 ms
+  ✓  AT-06 responde 200
+  ┌
+  │ `Using "atob" is deprecated. Use "require('atob')" ins
+  │ tead.`
+  └
+  ✓  AT-06 el token no trae roles y exige cambio
+
+↳ AT-07 · Con la clave temporal no se registran envíos
+  POST http://localhost:18080/api/shipments [403 Forbidden, 598B, 26ms]
+  ✓  AT-07 tiempo de respuesta < 1500 ms
+  ✓  AT-07 responde 403
+
+↳ AT-08 · Clave nueva de menos de 10 caracteres
+  POST http://localhost:18080/api/auth/clave/cambiar [400 Bad Request, 544B, 158ms]
+  ✓  AT-08 tiempo de respuesta < 1500 ms
+  ✓  AT-08 responde 400
+  ✓  AT-08 dice qué regla incumple
+
+↳ AT-09 · Clave nueva igual a la anterior
+  POST http://localhost:18080/api/auth/clave/cambiar [400 Bad Request, 549B, 196ms]
+  ✓  AT-09 tiempo de respuesta < 1500 ms
+  ✓  AT-09 responde 400
+  ✓  AT-09 exige que sea distinta
+
+↳ AT-10 · Cambio de clave válido
+  POST http://localhost:18080/api/auth/clave/cambiar [204 No Content, 371B, 371ms]
+  ✓  AT-10 tiempo de respuesta < 1500 ms
+  ✓  AT-10 responde 204
+
+↳ AT-11 · Ingreso con la clave nueva recupera el rol
+  POST http://localhost:18080/api/auth/login [200 OK, 798B, 122ms]
+  ✓  AT-11 tiempo de respuesta < 1500 ms
+  ✓  AT-11 responde 200
+  ┌
+  │ `Using "atob" is deprecated. Use "require('atob')" ins
+  │ tead.`
+  └
+  ✓  AT-11 el token ya trae OPERADOR
+
+↳ AT-12 · Recuperar con un correo que no existe da la misma respuesta
+  POST http://localhost:18080/api/auth/clave/recuperar [202 Accepted, 528B, 43ms]
+  ✓  AT-12 tiempo de respuesta < 1500 ms
+  ✓  AT-12 responde 202
+  ✓  AT-12 respuesta uniforme (no revela si la cuenta existe)
+
+❏ HU-09 · Bloqueo por intentos fallidos
+↳ AT-13 · Cinco intentos fallidos bloquean la cuenta
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 125ms]
+  ✓  AT-13 tiempo de respuesta < 1500 ms
+  ✓  AT-13 responde 401
+
+Attempting to set next request to AT-13 · Cinco intentos fallidos bloquean la cuenta
+
+↳ AT-13 · Cinco intentos fallidos bloquean la cuenta
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 227ms]
+  ✓  AT-13 tiempo de respuesta < 1500 ms
+  ✓  AT-13 responde 401
+
+Attempting to set next request to AT-13 · Cinco intentos fallidos bloquean la cuenta
+
+↳ AT-13 · Cinco intentos fallidos bloquean la cuenta
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 126ms]
+  ✓  AT-13 tiempo de respuesta < 1500 ms
+  ✓  AT-13 responde 401
+
+Attempting to set next request to AT-13 · Cinco intentos fallidos bloquean la cuenta
+
+↳ AT-13 · Cinco intentos fallidos bloquean la cuenta
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 138ms]
+  ✓  AT-13 tiempo de respuesta < 1500 ms
+  ✓  AT-13 responde 401
+
+Attempting to set next request to AT-13 · Cinco intentos fallidos bloquean la cuenta
+
+↳ AT-13 · Cinco intentos fallidos bloquean la cuenta
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 207ms]
+  ✓  AT-13 tiempo de respuesta < 1500 ms
+  ✓  AT-13 responde 401
+
+↳ AT-14 · Bloqueada, ni la clave correcta entra
+  POST http://localhost:18080/api/auth/login [401 Unauthorized, 546B, 213ms]
+  ✓  AT-14 tiempo de respuesta < 1500 ms
+  ✓  AT-14 responde 401
+  ✓  AT-14 el mensaje no revela el bloqueo
+
+↳ AT-15 · La auditoría registra el bloqueo
+  GET http://localhost:18080/api/admin/usuarios/auditoria?cuantos=20 [200 OK, 3.73kB, 104ms]
+  ✓  AT-15 tiempo de respuesta < 1500 ms
+  ✓  AT-15 responde 200
+  ✓  AT-15 hay un CUENTA_BLOQUEADA del usuario
+
+↳ AT-16 · El administrador desbloquea
+  POST http://localhost:18080/api/admin/usuarios/qamwva5p4j/desbloquear [200 OK, 571B, 60ms]
+  ✓  AT-16 tiempo de respuesta < 1500 ms
+  ✓  AT-16 responde 200
+  ✓  AT-16 queda sin bloqueo y contador en 0
+
+↳ AT-17 · Tras el desbloqueo entra de inmediato
+  POST http://localhost:18080/api/auth/login [200 OK, 798B, 140ms]
+  ✓  AT-17 tiempo de respuesta < 1500 ms
+  ✓  AT-17 responde 200
+
+↳ AT-18 · Desactivar al usuario cierra su sesión
+  PUT http://localhost:18080/api/admin/usuarios/qamwva5p4j/activo?valor=false [200 OK, 572B, 60ms]
+  ✓  AT-18 tiempo de respuesta < 1500 ms
+  ✓  AT-18 responde 200
+
+↳ AT-19 · El token del usuario desactivado ya no sirve
+  GET http://localhost:18080/api/auth/sesion [401 Unauthorized, 617B, 53ms]
+  ✓  AT-19 tiempo de respuesta < 1500 ms
+  ✓  AT-19 responde 401
+
+❏ HU-14 / HU-13 · Comprobante y datos personales
+↳ AT-20 · Registrar un envío devuelve el comprobante
+  POST http://localhost:18080/api/shipments [202 Accepted, 881B, 205ms]
+  ✓  AT-20 tiempo de respuesta < 1500 ms
+  ✓  AT-20 responde 202
+  ✓  AT-20 guía con formato TF + 12
+  ✓  AT-20 comprobante con seis campos
+
+↳ AT-21 · Reimprimir el comprobante
+  GET http://localhost:18080/api/shipments/TFE89756B04F28/receipt [200 OK, 571B, 100ms]
+  ✓  AT-21 tiempo de respuesta < 1500 ms
+  ✓  AT-21 responde 200
+  ✓  AT-21 sin teléfonos ni direcciones
+  ✓  AT-21 no se guarda en caché
+
+↳ AT-22 · Comprobante sin sesión
+  GET http://localhost:18080/api/shipments/TFE89756B04F28/receipt [401 Unauthorized, 498B, 11ms]
+  ✓  AT-22 tiempo de respuesta < 1500 ms
+  ✓  AT-22 responde 401
+
+↳ AT-23 · Comprobante de una guía inexistente
+  GET http://localhost:18080/api/shipments/TF000000000000/receipt [404 Not Found, 610B, 48ms]
+  ✓  AT-23 tiempo de respuesta < 1500 ms
+  ✓  AT-23 responde 404
+
+↳ AT-24 · El operador ve la ficha enmascarada
+  GET http://localhost:18080/api/shipments/TFE89756B04F28/ficha [200 OK, 828B, 106ms]
+  ✓  AT-24 tiempo de respuesta < 1500 ms
+  ✓  AT-24 responde 200
+  ✓  AT-24 teléfono y documento enmascarados
+
+↳ AT-25 · El operador no ve la ficha completa
+  GET http://localhost:18080/api/shipments/TFE89756B04F28/ficha/completa [403 Forbidden, 598B, 40ms]
+  ✓  AT-25 tiempo de respuesta < 1500 ms
+  ✓  AT-25 responde 403
+
+↳ AT-26 · El administrador ve la ficha completa
+  GET http://localhost:18080/api/shipments/TFE89756B04F28/ficha/completa [200 OK, 827B, 70ms]
+  ✓  AT-26 tiempo de respuesta < 1500 ms
+  ✓  AT-26 responde 200
+  ✓  AT-26 datos sin enmascarar
+
+↳ AT-27 · Rastreo anónimo con datos mínimos
+  GET http://localhost:18082/api/tracking/TFE89756B04F28 [200 OK, 758B, 88ms]
+  ✓  AT-27 tiempo de respuesta < 1500 ms
+  ✓  AT-27 responde 200
+  ✓  AT-27 nombres enmascarados, sin dirección y marcado restricted
+
+❏ HU-11 · Reportes solo para supervisión
+↳ AT-28 · El operador ya no ve los reportes
+  GET http://localhost:18082/api/reports/transit-times?from=2026-11-01&to=2026-11-20 [403 Forbidden, 598B, 186ms]
+  ✓  AT-28 tiempo de respuesta < 1500 ms
+  ✓  AT-28 responde 403
+
+↳ AT-29 · El supervisor ve los tiempos de tránsito
+  GET http://localhost:18082/api/reports/transit-times?from=2026-11-01&to=2026-11-20 [200 OK, 646B, 223ms]
+  ✓  AT-29 tiempo de respuesta < 1500 ms
+  ✓  AT-29 responde 200
+  ✓  AT-29 trae el periodo pedido
+
+↳ AT-30 · Periodo anterior al inicio de la operación
+  GET http://localhost:18082/api/reports/shipment-volume?from=1939-01-01&to=1939-02-01 [400 Bad Request, 611B, 40ms]
+  ✓  AT-30 tiempo de respuesta < 1500 ms
+  ✓  AT-30 responde 400
+  ✓  AT-30 explica el límite
+
+↳ AT-31 · Reporte sin sesión
+  GET http://localhost:18082/api/reports/delayed-shipments [401 Unauthorized, 498B, 39ms]
+  ✓  AT-31 tiempo de respuesta < 1500 ms
+  ✓  AT-31 responde 401
+
+❏ HU-16 · Excepciones logísticas
+↳ AT-32 · Excepción sobre un envío sin movimientos
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [422 Unprocessable Entity (WebDAV) (RFC 4918), 716B, 939ms]
+  ✓  AT-32 tiempo de respuesta < 1500 ms
+  ✓  AT-32 responde 422
+
+↳ AT-33 · Recibir el envío en el centro de origen
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [202 Accepted, 651B, 140ms]
+  ✓  AT-33 tiempo de respuesta < 1500 ms
+  ✓  AT-33 responde 202
+
+↳ AT-34 · Excepción sin motivo
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [400 Bad Request, 718B, 58ms]
+  ✓  AT-34 tiempo de respuesta < 1500 ms
+  ✓  AT-34 responde 400
+  ✓  AT-34 lista los motivos válidos
+
+↳ AT-35 · Excepción con un motivo que no existe
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [400 Bad Request, 1.02kB, 38ms]
+  ✓  AT-35 tiempo de respuesta < 1500 ms
+  ✓  AT-35 responde 400
+  1. AT-35 el error no expone clases Java
+
+↳ AT-36 · Registrar la excepción con motivo y nota
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [202 Accepted, 642B, 246ms]
+  ✓  AT-36 tiempo de respuesta < 1500 ms
+  ✓  AT-36 responde 202
+
+↳ AT-37 · El historial muestra la excepción y el estado no retrocede
+  GET http://localhost:18083/api/shipments/TFE89756B04F28/events [200 OK, 1.33kB, 255ms]
+  ✓  AT-37 tiempo de respuesta < 1500 ms
+  ✓  AT-37 responde 200
+  ✓  AT-37 hay dos movimientos y el último es la excepción
+  ✓  AT-37 el estado sigue en centro de distribución
+
+↳ AT-38 · El supervisor no registra movimientos
+  POST http://localhost:18083/api/shipments/TFE89756B04F28/events [403 Forbidden, 598B, 30ms]
+  ✓  AT-38 tiempo de respuesta < 1500 ms
+  ✓  AT-38 responde 403
+
+❏ HU-20 · Recogidas a domicilio
+↳ AT-39 · Horario de atención público
+  GET http://localhost:18080/api/pickups/operating-hours [200 OK, 612B, 96ms]
+  ✓  AT-39 tiempo de respuesta < 1500 ms
+  ✓  AT-39 responde 200
+  ✓  AT-39 cinco franjas de 08:00 a 18:00
+
+↳ AT-40 · Autoservicio: solicitar una recogida
+  POST http://localhost:18080/api/pickups/self-service [202 Accepted, 567B, 248ms]
+  ✓  AT-40 tiempo de respuesta < 1500 ms
+  ✓  AT-40 responde 202
+  ✓  AT-40 número RC y código de 8 caracteres
+
+↳ AT-41 · Consultar la recogida con el código de gestión
+  GET http://localhost:18080/api/pickups/self-service/RCBBE6F485BFD6 [200 OK, 997B, 169ms]
+  ✓  AT-41 tiempo de respuesta < 1500 ms
+  ✓  AT-41 responde 200
+  ✓  AT-41 queda solicitada
+
+↳ AT-42 · Un código equivocado responde igual que una recogida inexistente
+  GET http://localhost:18080/api/pickups/self-service/RCBBE6F485BFD6 [404 Not Found, 525B, 110ms]
+  ✓  AT-42 tiempo de respuesta < 1500 ms
+  ✓  AT-42 responde 404
+  ✓  AT-42 mensaje que no revela cuál falló
+
+↳ AT-43 · No se recoge los domingos
+  POST http://localhost:18080/api/pickups/self-service [422 Unprocessable Entity (WebDAV) (RFC 4918), 559B, 33ms]
+  ✓  AT-43 tiempo de respuesta < 1500 ms
+  ✓  AT-43 responde 422
+
+↳ AT-44 · Peso por encima de 100 kg
+  POST http://localhost:18080/api/pickups/self-service [400 Bad Request, 590B, 24ms]
+  ✓  AT-44 tiempo de respuesta < 1500 ms
+  ✓  AT-44 responde 400
+
+↳ AT-45 · El autoservicio no puede vincular una guía
+  POST http://localhost:18080/api/pickups/self-service [400 Bad Request, 494B, 13ms]
+  ✓  AT-45 tiempo de respuesta < 1500 ms
+  ✓  AT-45 responde 400
+
+↳ AT-46 · Cancelar por autoservicio
+  POST http://localhost:18080/api/pickups/self-service/RCBBE6F485BFD6/cancel [202 Accepted, 320B, 121ms]
+  ✓  AT-46 tiempo de respuesta < 1500 ms
+  ✓  AT-46 responde 202
+
+↳ AT-47 · Registrar el envío que se va a recoger
+  POST http://localhost:18080/api/shipments [202 Accepted, 881B, 74ms]
+  ✓  AT-47 tiempo de respuesta < 1500 ms
+  ✓  AT-47 responde 202
+
+↳ AT-48 · El operador pide la recogida con la guía
+  POST http://localhost:18080/api/pickups [202 Accepted, 567B, 233ms]
+  ✓  AT-48 tiempo de respuesta < 1500 ms
+  ✓  AT-48 responde 202
+
+↳ AT-49 · La misma guía no admite otra recogida activa
+  POST http://localhost:18080/api/pickups [409 Conflict, 600B, 103ms]
+  ✓  AT-49 tiempo de respuesta < 1500 ms
+  ✓  AT-49 responde 409
+
+↳ AT-50 · Asignar la recogida al operador
+  PUT http://localhost:18080/api/pickups/RCB10EBC1366AF/schedule [202 Accepted, 388B, 87ms]
+  ✓  AT-50 tiempo de respuesta < 1500 ms
+  ✓  AT-50 responde 202
+
+↳ AT-51 · Despachar
+  POST http://localhost:18080/api/pickups/RCB10EBC1366AF/dispatch [202 Accepted, 388B, 87ms]
+  ✓  AT-51 tiempo de respuesta < 1500 ms
+  ✓  AT-51 responde 202
+
+↳ AT-52 · Completar
+  POST http://localhost:18080/api/pickups/RCB10EBC1366AF/complete [202 Accepted, 388B, 28ms]
+  ✓  AT-52 tiempo de respuesta < 1500 ms
+  ✓  AT-52 responde 202
+
+↳ AT-53 · El envío recogido queda en custodia
+  GET http://localhost:18082/api/tracking/TFC2C0B022107A [200 OK, 762B, 42ms]
+  ✓  AT-53 tiempo de respuesta < 1500 ms
+  ✓  AT-53 responde 200
+
+Attempting to set next request to AT-53 · El envío recogido queda en custodia
+
+↳ AT-53 · El envío recogido queda en custodia
+  GET http://localhost:18082/api/tracking/TFC2C0B022107A [200 OK, 762B, 30ms]
+  ✓  AT-53 tiempo de respuesta < 1500 ms
+  ✓  AT-53 responde 200
+
+Attempting to set next request to AT-53 · El envío recogido queda en custodia
+
+↳ AT-53 · El envío recogido queda en custodia
+  GET http://localhost:18082/api/tracking/TFC2C0B022107A [200 OK, 805B, 31ms]
+  ✓  AT-53 tiempo de respuesta < 1500 ms
+  ✓  AT-53 responde 200
+  ✓  AT-53 estado IN_CUSTODY (tras 3 consultas)
+
+❏ HU-19 · Peticiones, quejas y reclamos
+↳ AT-54 · Radicar una queja
+  POST http://localhost:18080/api/pqr [201 Created, 569B, 80ms]
+  ✓  AT-54 tiempo de respuesta < 1500 ms
+  ✓  AT-54 responde 201
+  ✓  AT-54 radicado PQR-AAAA-NNNNN en estado RECIBIDA
+
+↳ AT-55 · Descripción de 19 caracteres (límite inferior)
+  POST http://localhost:18080/api/pqr [400 Bad Request, 586B, 22ms]
+  ✓  AT-55 tiempo de respuesta < 1500 ms
+  ✓  AT-55 responde 400
+  ✓  AT-55 indica el rango 20 a 2000
+
+↳ AT-56 · Consultar con radicado y correo
+  POST http://localhost:18080/api/pqr/consulta [200 OK, 602B, 126ms]
+  ✓  AT-56 tiempo de respuesta < 1500 ms
+  ✓  AT-56 responde 200
+  ✓  AT-56 sin respuesta mientras no se resuelva
+
+↳ AT-57 · Consultar con un correo ajeno
+  POST http://localhost:18080/api/pqr/consulta [404 Not Found, 492B, 31ms]
+  ✓  AT-57 tiempo de respuesta < 1500 ms
+  ✓  AT-57 responde 404
+
+↳ AT-58 · El operador no gestiona PQR
+  GET http://localhost:18080/api/pqr [403 Forbidden, 598B, 30ms]
+  ✓  AT-58 tiempo de respuesta < 1500 ms
+  ✓  AT-58 responde 403
+
+↳ AT-59 · No se salta de RECIBIDA a RESUELTA
+  POST http://localhost:18080/api/pqr/PQR-2026-00019/estado [409 Conflict, 611B, 87ms]
+  ✓  AT-59 tiempo de respuesta < 1500 ms
+  ✓  AT-59 responde 409
+
+↳ AT-60 · Pasar a EN_TRAMITE
+  POST http://localhost:18080/api/pqr/PQR-2026-00019/estado [200 OK, 958B, 74ms]
+  ✓  AT-60 tiempo de respuesta < 1500 ms
+  ✓  AT-60 responde 200
+
+↳ AT-61 · Resolver sin respuesta
+  POST http://localhost:18080/api/pqr/PQR-2026-00019/estado [400 Bad Request, 590B, 67ms]
+  ✓  AT-61 tiempo de respuesta < 1500 ms
+  ✓  AT-61 responde 400
+
+↳ AT-62 · Resolver con respuesta
+  POST http://localhost:18080/api/pqr/PQR-2026-00019/estado [200 OK, 1.06kB, 49ms]
+  ✓  AT-62 tiempo de respuesta < 1500 ms
+  ✓  AT-62 responde 200
+
+↳ AT-63 · El solicitante ve la respuesta
+  POST http://localhost:18080/api/pqr/consulta [200 OK, 755B, 30ms]
+  ✓  AT-63 tiempo de respuesta < 1500 ms
+  ✓  AT-63 responde 200
+  ✓  AT-63 estado RESUELTA con respuesta e historial de 3 pasos
+
+❏ HU-21 · Chatbot de preguntas frecuentes
+↳ AT-64 · Abrir una conversación
+  POST http://localhost:18080/api/chatbot/sesiones [201 Created, 411B, 16ms]
+  ✓  AT-64 tiempo de respuesta < 1500 ms
+  ✓  AT-64 responde 201
+
+↳ AT-65 · Pregunta frecuente
+  POST http://localhost:18080/api/chatbot/mensajes [200 OK, 641B, 51ms]
+  ✓  AT-65 tiempo de respuesta < 1500 ms
+  ✓  AT-65 responde 200
+  ✓  AT-65 responde la intención como_rastrear
+
+↳ AT-66 · Pregunta fuera de tema ofrece radicar una PQR
+  POST http://localhost:18080/api/chatbot/mensajes [200 OK, 578B, 15ms]
+  ✓  AT-66 tiempo de respuesta < 1500 ms
+  ✓  AT-66 responde 200
+  ✓  AT-66 FUERA_DE_TEMA con acción ABRIR_PQR
+
+↳ AT-67 · Un número de guía no consulta datos del envío
+  POST http://localhost:18080/api/chatbot/mensajes [200 OK, 646B, 10ms]
+  ✓  AT-67 tiempo de respuesta < 1500 ms
+  ✓  AT-67 responde 200
+  ✓  AT-67 manda a la página de rastreo sin mostrar datos
+
+↳ AT-68 · Mensaje de 301 caracteres
+  POST http://localhost:18080/api/chatbot/mensajes [400 Bad Request, 578B, 15ms]
+  ✓  AT-68 tiempo de respuesta < 1500 ms
+  ✓  AT-68 responde 400
+
+↳ AT-69 · Sesión inexistente
+  POST http://localhost:18080/api/chatbot/mensajes [400 Bad Request, 480B, 15ms]
+  ✓  AT-69 tiempo de respuesta < 1500 ms
+  ✓  AT-69 responde 400
+  ✓  AT-69 pide crear otra sesión
+
+↳ AT-70 · Identificador de sesión mal formado
+  POST http://localhost:18080/api/chatbot/mensajes [400 Bad Request, 831B, 20ms]
+  ✓  AT-70 tiempo de respuesta < 1500 ms
+  ✓  AT-70 responde 400
+  2. AT-70 el error no expone clases Java
+
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │           executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                 79 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│            test-scripts │                 79 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│      prerequest-scripts │                 17 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                198 │                  2 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 35.4s                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ total data received: 20.94kB (approx)                             │
+├───────────────────────────────────────────────────────────────────┤
+│ average response time: 114ms [min: 10ms, max: 939ms, s.d.: 125ms] │
+└───────────────────────────────────────────────────────────────────┘
+
+[31m  # [39m[31m failure        [39m[31m detail                                                                                                    [39m
+[90m    [39m[90m                [39m[90m                                                                                                           [39m
+ 1.  AssertionError  AT-35 el error no expone clases Java                                                                      
+                     expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/ 
+                     at assertion:2 in test-script                                                                             
+                     inside "HU-16 · Excepciones logísticas / AT-35 · Excepción con un motivo que no existe"                   
+[90m    [39m[90m                [39m[90m                                                                                                           [39m
+ 2.  AssertionError  AT-70 el error no expone clases Java                                                                      
+                     expected '{"detail":"Alguno de los campos trae …' not to match /java\.|com\.trackflow|Cannot deserialize/ 
+                     at assertion:2 in test-script                                                                             
+                     inside "HU-21 · Chatbot de preguntas frecuentes / AT-70 · Identificador de sesión mal formado"            
